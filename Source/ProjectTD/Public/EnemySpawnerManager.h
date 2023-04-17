@@ -15,8 +15,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<TSubclassOf<class AEnemy>> EnemyClasses;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ClampMin = 30, UIMin = 30, ClampMax = 600, UIMax = 600))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ClampMin = 15, UIMin = 15, ClampMax = 600, UIMax = 600))
 	int32 SecondsUntilNextWave;
+
+	FSpawnWave() : SecondsUntilNextWave(15){}
 };
 
 UCLASS()
@@ -41,7 +43,7 @@ protected:
 	TArray<FSpawnWave> SpawnWaves;
 
 	// Interwal to wait between spawn next enemy
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning", meta = (ClampMin = 0.4, UIMin = 0.4, ClampMax = 2.5, UIMax = 2.5))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning|Interval", meta = (ClampMin = 0.4, UIMin = 0.4, ClampMax = 2.5, UIMax = 2.5))
 	float SpawnInterval;
 
 	// Called when the game starts or when spawned

@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Path.h"
 #include "AIController.h"
+#include "CameraPlayer.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -135,7 +136,13 @@ void AEnemy::Die()
 // Reward player with a bounty
 void AEnemy::RewardPlayer()
 {
-	//TODO
+	TArray<AActor*> CameraPlayers;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACameraPlayer::StaticClass(), CameraPlayers);
+
+	if ( auto Player = Cast<ACameraPlayer>(CameraPlayers[0]))
+	{
+		Player->AddBounty(Bounty);
+	}
 }
 
 // Checks if enemy has that effect

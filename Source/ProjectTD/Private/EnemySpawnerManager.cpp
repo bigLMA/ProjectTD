@@ -18,6 +18,7 @@ void AEnemySpawnerManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	BeginSpawnWave();
 }
 
 // Begin spawn next wave
@@ -30,9 +31,16 @@ void AEnemySpawnerManager::BeginSpawnWave()
 	GetWorld()->GetTimerManager().ClearTimer(InWaveTimerHandle);
 	GetWorld()->GetTimerManager().ClearTimer(BetweenWaveTimerHandle);
 
+	// Check if all waves are spawned
+	if (!SpawnWaves.IsValidIndex(CurrentWave))
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("VSE"))
+		return;
+	}
+
 	//... and start new one
 	GetWorld()->GetTimerManager().SetTimer(InWaveTimerHandle, this,
-		&AEnemySpawnerManager::SpawnEnemy, SpawnInterval, true, SpawnInterval);
+		&AEnemySpawnerManager::SpawnEnemy, SpawnInterval, true);
 	SetTimerToSpawnNextWave(SpawnWaves[CurrentWave].SecondsUntilNextWave);
 }
 
@@ -48,9 +56,16 @@ void AEnemySpawnerManager::SetTimerToSpawnNextWave(int32 DelayTime)
 // Spawns next enemy in queue
 void AEnemySpawnerManager::SpawnEnemy()
 {
+	// Check if spawned all enemies in wave
+	if (!SpawnWaves[CurrentWave].EnemyClasses.IsValidIndex(CurrentEnemy) || !SpawnWaves.IsValidIndex(CurrentWave))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(InWaveTimerHandle);
+		return;
+	}
+
+	// Spawn enemy
 	FActorSpawnParameters Params;
 	auto Location = GetActorLocation();
-
 	GetWorld()->SpawnActor<AEnemy>(SpawnWaves[CurrentWave].EnemyClasses[CurrentEnemy++],
 		Location, FRotator(), Params);
 }
