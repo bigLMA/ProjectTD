@@ -46,7 +46,8 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemy::RecieveDamage(int32 Damage)
+// Called when enemy takes damage
+void AEnemy::ReceiveDamage(int32 Damage)
 {
 	Health -= Damage;
 
@@ -56,9 +57,15 @@ void AEnemy::RecieveDamage(int32 Damage)
 	}
 }
 
+// Called when enemy is set on fire
 void AEnemy::ApplyBurning(int32 BurningDamage, float BurningDuration, float BurningInterval)
 {
 	int32 Index = -1;
+
+	if (CheckForImmunity(EEffects::Burning, Index))
+	{
+		return;
+	}
 
 	// Ñheck if enemy already has effect applied
 	if (CheckForEffect(EEffects::Burning, Index))
@@ -90,13 +97,18 @@ void AEnemy::OnBurningDamageTimerFinished()
 // Called when enemy takes damage over time from burning
 void AEnemy::TakeDamageFromBurning(int32 BurningDamage)
 {
-	RecieveDamage(BurningDamage);
+	ReceiveDamage(BurningDamage);
 }
 
 // Apply slow on Enemy
 void AEnemy::ApplySlow(float SlowStrength, float SlowDuration)
 {
 	int Index = -1;
+
+	if (CheckForImmunity(EEffects::Slow, Index))
+	{
+		return;
+	}
 
 	// Ñheck if enemy already has effect applied
 	if (CheckForEffect(EEffects::Slow, Index))
@@ -149,7 +161,7 @@ void AEnemy::RewardPlayer()
 // Return -1 in index if false
 bool AEnemy::CheckForEffect(EEffects Effect, int32& Index)
 {
-	return false;
+	return Effects.Find(Effect, Index);
 }
 
 // Sets all enemy variables, that cannot be set on construction
@@ -158,6 +170,11 @@ void AEnemy::InitializeEnemy()
 	Health = MaxHealth;
 	InitialSpeed = FloatingPawnComponent->MaxSpeed;
 	RandomizeEnemyBounty();
+}
+
+bool AEnemy::CheckForImmunity(EEffects Effect, int32& Index)
+{
+	return Immunities.Find(Effect, Index);
 }
 
 // Called on BeginPlay to change bounty 
@@ -169,8 +186,6 @@ void AEnemy::RandomizeEnemyBounty()
 // Called on BeginPlay, and when enemy is closed to target
 void AEnemy::WalkToNextTarget()
 {
-	//if () { return; }
-
 	TArray<AActor*> Paths;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APath::StaticClass(), Paths);
 

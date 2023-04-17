@@ -28,8 +28,7 @@ void AEnemySpawnerManager::BeginSpawnWave()
 	CurrentEnemy = 0;
 
 	// Release old timers...
-	GetWorld()->GetTimerManager().ClearTimer(InWaveTimerHandle);
-	GetWorld()->GetTimerManager().ClearTimer(BetweenWaveTimerHandle);
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 
 	// Check if all waves are spawned
 	if (!SpawnWaves.IsValidIndex(CurrentWave))

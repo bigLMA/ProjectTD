@@ -26,7 +26,7 @@ public:
 
 	// Called when enemy takes damage
 	UFUNCTION(BlueprintCallable, Category = "Damage")
-	void RecieveDamage(int32 Damage);
+	virtual void ReceiveDamage(int32 Damage);
 
 	// Called when enemy is set on fire
 	UFUNCTION(BlueprintCallable, Category = "Burning")
@@ -69,6 +69,10 @@ protected:
 	// Initial speed of enemy
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float InitialSpeed;
+
+	// Immunity to negative effects
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Immunities")
+	TArray<EEffects> Immunities;
 
 	// Enemy copmonents
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Root")
@@ -117,6 +121,9 @@ private:
 
 	// Sets all enemy variables, that cannot be set on construction
 	void InitializeEnemy();
+
+	// Checks for immunity
+	bool CheckForImmunity(EEffects Effect, int32& Index);
 
 	// Timer handle for checking proximity to target
 	FTimerHandle TimerProximityTimerHandle;

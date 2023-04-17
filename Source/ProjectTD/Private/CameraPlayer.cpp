@@ -69,7 +69,6 @@ void ACameraPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 void ACameraPlayer::Move(const FInputActionValue& Value)
 {
 	auto MoveValue = Value.Get<FVector2D>();
-
 	AddMovementInput(GetActorForwardVector(), MoveValue.Y);
 	AddMovementInput(GetActorRightVector(), MoveValue.X);
 }
@@ -78,23 +77,27 @@ void ACameraPlayer::Move(const FInputActionValue& Value)
 void ACameraPlayer::Zoom(const FInputActionValue& Value)
 {
 	auto ZoomValue = Value.Get<float>();
-
-	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength, ZoomMin, ZoomMax);
-	SpringArm->TargetArmLength += ZoomValue * ZoomSpeed;
+	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + ZoomValue * ZoomSpeed, ZoomMin, ZoomMax);
+	/*SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength, ZoomMin, ZoomMax);
+	SpringArm->TargetArmLength += ZoomValue * ZoomSpeed;*/
 }
 
 // Rotates pawn
 void ACameraPlayer::Rotate(const FInputActionValue& Value)
 {
 	auto RotateValue = Value.Get<float>();
-
-	SetActorRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw + RotateValue, GetActorRotation().Roll));
+	SetActorRotation(GetActorRotation() + FRotator(0.f, RotateValue, 0.f));
+	//SetActorRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw + RotateValue, GetActorRotation().Roll));
 }
 
 // Select interactable actor
 void ACameraPlayer::Select(const FInputActionValue& Value)
 {
-	//TODO
+	auto Selection = Value.Get<bool>();//TODO
+	if (Selection)
+	{
+
+	}
 }
 
 // Income
