@@ -40,6 +40,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Slow")
 	void ApplySlow(float SlowStrength, float SlowDuration);
 
+	FVector GetMeshLocation() const;
+
 protected:
 
 	// Called when the game starts or when spawned

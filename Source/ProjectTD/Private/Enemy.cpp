@@ -131,6 +131,11 @@ void AEnemy::ApplySlow(float SlowStrength, float SlowDuration)
 	}
 }
 
+FVector AEnemy::GetMeshLocation() const
+{
+	return Mesh->GetComponentLocation();
+}
+
 // Removes slow from enemy
 void AEnemy::RemoveSlow()
 {
