@@ -26,7 +26,7 @@ public:
 
 	// Aim at special location
 	UFUNCTION(BlueprintCallable, Category = "Aiming")
-	void AimAt(const FVector& Location);
+	void AimAt(const AActor* Target);
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,14 +41,17 @@ protected:
 	int32 Damage;
 
 	// Speed of firing new projectiles
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire rate", meta = (ClampMin = 0.05, UIMin = 0.05))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire rate", meta = (ClampMin = 0.1, UIMin = 0.1))
 	float FireRate;
 
 	//TODO Projectile class
 
 	// Turret rotation per second
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret rotation")
-	double RotationSpeed;
+	float RotationSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Base")
+	USceneComponent* Root;
 
 	// Components
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret")
@@ -66,4 +69,9 @@ protected:
 private:	
 	//Target of the turret
 	//class AEnemy* Target;
+
+	// Aiming timer
+	FTimerHandle AimingTimerHandle;
+
+	void LockOn(const AActor* Target, float Time);
 };
