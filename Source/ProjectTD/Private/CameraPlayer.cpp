@@ -93,7 +93,7 @@ void ACameraPlayer::Rotate(const FInputActionValue& Value)
 // Select interactable actor
 void ACameraPlayer::Select(const FInputActionValue& Value)
 {
-	auto Selection = Value.Get<bool>();//TODO
+	auto Selection = Value.Get<bool>();//TODO selection
 	if (Selection)
 	{
 

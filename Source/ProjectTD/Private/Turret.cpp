@@ -9,7 +9,7 @@
 
 // Sets default values
 ATurret::ATurret()
-	:RotationSpeed(6.5f), Cost(10), ReloadTime(1.7f), Damage(15)
+	:RotationSpeed(9.5f), Cost(10), ReloadTime(0.6f), Damage(15)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -60,9 +60,8 @@ void ATurret::AimAt(const AActor* Target)
 {
 	float Time = 0.015f;
 
-	if (Target)
+	if (IsValid(Target))
 	{
-		//TODO
 		GetWorld()->GetTimerManager().SetTimer(AimingTimerHandle, [this, Target, Time]()
 		{
 			LockOn(Target, Time);
@@ -100,11 +99,18 @@ void ATurret::LockOn(const AActor* Target, float Time)
 
 void ATurret::Fire(const AActor* Target)
 {
-	LastFireTime = FPlatformTime::Seconds();
-
-	FActorSpawnParameters Params;
-	auto Projectile = GetWorld()->SpawnActor<ATurretProjectile>(ProjectileClass, 
-		ShootColision->GetComponentLocation(), Tower->GetRelativeRotation(),
-		Params);
-	Projectile->ActivateProjectile(Target, Damage);
+	if (IsValid(Target))
+	{
+		LastFireTime = FPlatformTime::Seconds();
+		FActorSpawnParameters Params;
+		auto Projectile = GetWorld()->SpawnActor<ATurretProjectile>(ProjectileClass,
+			ShootColision->GetComponentLocation(), Tower->GetRelativeRotation(),
+			Params);
+		Projectile->ActivateProjectile(Target, Damage);
+	}
+	else
+	{
+		const FVector& Location = GetActorLocation();
+		OnTargetLost.Broadcast(Location);
+	}
 }

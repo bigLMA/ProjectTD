@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "Turret.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTargetLostDelegate, const FVector& , Location)
+
 UCLASS()
 class PROJECTTD_API ATurret : public APawn
 {
@@ -24,6 +26,8 @@ public:
 	// Aim at special location
 	UFUNCTION(BlueprintCallable, Category = "Aiming")
 	void AimAt(const AActor* Target);
+
+	FTargetLostDelegate OnTargetLost;
 
 protected:
 	// Called when the game starts or when spawned
@@ -77,7 +81,6 @@ private:
 
 	// Fires at target
 	void Fire(const AActor* Target);
-
 
 	double LastFireTime;
 };

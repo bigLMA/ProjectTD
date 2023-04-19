@@ -27,7 +27,7 @@ AEnemy::AEnemy()
 	Collision->SetupAttachment(Mesh);
 
 	FloatingPawnComponent = CreateDefaultSubobject<UFloatingPawnMovement>("Pawn Movement");
-	FloatingPawnComponent->MaxSpeed = 250;
+	FloatingPawnComponent->MaxSpeed = 300;
 }
 
 // Called when the game starts or when spawned

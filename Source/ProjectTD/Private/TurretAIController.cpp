@@ -20,6 +20,7 @@ ATurretAIController::ATurretAIController(const FObjectInitializer& ObjectInitial
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	SightConfig->SetMaxAge(0.001f);
 	AIPerceptionComponent->ConfigureSense(*SightConfig);
 	AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
 	AIPerceptionComponent->SetActive(true);
@@ -31,6 +32,7 @@ void ATurretAIController::BeginPlay()
 	if (AIPerceptionComponent) 
 	{
 		AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ATurretAIController::TargetPerceptionUpdated);
+		//AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, )
 	}
 }
 
@@ -44,6 +46,18 @@ void ATurretAIController::SetTarget(AEnemy* NewTarget)
 	if (auto ControlledTurret = Cast<ATurret>(GetPawn()))
 	{
 		ControlledTurret->AimAt(TargetActor);
+	}
+}
+
+// Called when setting pawn
+void ATurretAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	// Bound looking for enemy when target is lost
+	if (auto TurretPawn = Cast<ATurret>(InPawn))
+	{
+		TurretPawn->OnTargetLost.AddUniqueDynamic(this, &ATurretAIController::GetClosestEnemyToTarget);
 	}
 }
 
@@ -74,6 +88,7 @@ void ATurretAIController::TargetPerceptionUpdated(AActor* Actor, FAIStimulus Sti
 // Called when enemy left line of sight and controller needs to target new enemy
 void ATurretAIController::GetClosestEnemyToTarget(const FVector& Location)
 {
+	UE_LOG(LogTemp, Warning, TEXT("checking"));
 	TArray<AActor*> DetectedActors;
 	AIPerceptionComponent->GetCurrentlyPerceivedActors(UAISenseConfig_Sight::StaticClass(), DetectedActors);
 
@@ -94,8 +109,12 @@ void ATurretAIController::GetClosestEnemyToTarget(const FVector& Location)
 		}
 	}
 
-	if (ClosestEnemy)
+	if (IsValid(ClosestEnemy))
 	{
 		SetTarget(ClosestEnemy);
+	}
+	else
+	{
+		SetTarget(nullptr);
 	}
 }

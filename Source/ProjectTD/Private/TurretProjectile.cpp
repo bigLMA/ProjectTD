@@ -8,7 +8,7 @@
 
 // Sets default values
 ATurretProjectile::ATurretProjectile()
-	:Damage(0), ProjectileSpeed(3000.f)
+	:Damage(0), ProjectileSpeed(15.f)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -24,9 +24,9 @@ ATurretProjectile::ATurretProjectile()
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("Projectile movement");
 	ProjectileMovement->SetAutoActivate(false);
-	ProjectileMovement->MaxSpeed = 4000;
+	ProjectileMovement->MaxSpeed = 500.f;
 	ProjectileMovement->bIsHomingProjectile = true;
-	ProjectileMovement->HomingAccelerationMagnitude = 2250.f;
+	ProjectileMovement->HomingAccelerationMagnitude = 15000.f;
 }
 
 // Called when the game starts or when spawned
