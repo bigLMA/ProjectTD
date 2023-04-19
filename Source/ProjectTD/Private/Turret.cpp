@@ -78,17 +78,17 @@ void ATurret::LockOn(const AActor* Target, float Time)
 {
 	// Calculate new rotation for tower
 	auto Rot = UKismetMathLibrary::FindLookAtRotation(Tower->GetComponentLocation(), Target->GetActorLocation());
-	auto NewRot = FMath::RInterpTo(Tower->GetRelativeRotation(), Rot, Time, RotationSpeed);
+	auto NewRot = FMath::RInterpTo(Tower->GetComponentRotation(), Rot, Time, RotationSpeed);
 	FRotator LockRotation(0, NewRot.Yaw, 0);
 
 	// Rotate tower
-	Tower->SetRelativeRotation(LockRotation);
+	Tower->SetWorldRotation(LockRotation);
 
 	// Calculate if tower is rotated enogh to fire
-	float RelativeYaw = Tower->GetRelativeRotation().Yaw;
+	float RelativeYaw = Tower->GetComponentRotation().Yaw;
 	float NewRotYaw = Rot.Yaw;
 	float Diff = RelativeYaw - NewRotYaw;
-	float MinDiff = 7.5f;
+	float MinDiff = 25.f;
 
 	// Check if turret can fire 
 	if(FMath::Abs(Diff) < MinDiff && (FPlatformTime::Seconds() - LastFireTime) >= ReloadTime)
