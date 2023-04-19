@@ -7,7 +7,7 @@
 
 // Sets default values
 ATurret::ATurret()
-	:RotationSpeed(4.5f)
+	:RotationSpeed(6.5f), Cost(10), ReloadTime(1.2f), Damage(15)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -19,6 +19,9 @@ ATurret::ATurret()
 	Base = CreateDefaultSubobject<UStaticMeshComponent>("Base");
 	Base->SetupAttachment(Root);
 
+	Tower = CreateDefaultSubobject<UStaticMeshComponent>("Tower");
+	Tower->SetupAttachment(Base);
+
 	ShootDecal = CreateDefaultSubobject<UDecalComponent>("Shoot Decal");
 	ShootDecal->SetupAttachment(Root);
 	ShootDecal->SetAutoActivate(false);
@@ -29,7 +32,8 @@ ATurret::ATurret()
 void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	LastFireTime = FPlatformTime::Seconds();
 }
 
 // Called every frame
@@ -55,11 +59,10 @@ void ATurret::Fire()
 // Aim at special location
 void ATurret::AimAt(const AActor* Target)
 {
-	float Time = 0.1f;
+	float Time = 0.015f;
 
 	if (Target)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Target is set to %s"), *Target->GetName());
 		//TODO
 		GetWorld()->GetTimerManager().SetTimer(AimingTimerHandle, [this, Target, Time]()
 		{
@@ -68,19 +71,37 @@ void ATurret::AimAt(const AActor* Target)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Enemy named left"));
 		GetWorld()->GetTimerManager().ClearTimer(AimingTimerHandle);
 	}
 }
 
-
-
+// Locks on target
 void ATurret::LockOn(const AActor* Target, float Time)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Locking onto target %s"), *Target->GetName());
-	auto Rot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
-	auto NewRot = FMath::RInterpTo(GetActorRotation(), Rot, Time, RotationSpeed);
+	// Calculate new rotation for tower
+	auto Rot = UKismetMathLibrary::FindLookAtRotation(Tower->GetComponentLocation(), Target->GetActorLocation());
+	auto NewRot = FMath::RInterpTo(Tower->GetRelativeRotation(), Rot, Time, RotationSpeed);
 	FRotator LockRotation(0, NewRot.Yaw, 0);
 
-	SetActorRotation(LockRotation);
+	// Rotate tower
+	Tower->SetRelativeRotation(LockRotation);
+
+	// Calculate if tower is rotated enogh to fire
+	float RelativeYaw = Tower->GetRelativeRotation().Yaw;
+	float NewRotYaw = Rot.Yaw;
+	float Diff = RelativeYaw - NewRotYaw;
+	float MinDiff = 7.5f;
+
+	// Check if turret can fire 
+	if(FMath::Abs(Diff) < MinDiff && (FPlatformTime::Seconds() - LastFireTime) >= ReloadTime)
+	{
+		Fire(Target);
+	}
+}
+
+void ATurret::Fire(const AActor* Target)
+{
+	LastFireTime = FPlatformTime::Seconds();
+	// TODO Spawn projectile
+	UE_LOG(LogTemp, Warning, TEXT("Foier"));
 }

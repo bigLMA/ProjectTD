@@ -42,7 +42,7 @@ protected:
 
 	// Speed of firing new projectiles
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire rate", meta = (ClampMin = 0.1, UIMin = 0.1))
-	float FireRate;
+	float ReloadTime;
 
 	//TODO Projectile class
 
@@ -54,8 +54,8 @@ protected:
 	USceneComponent* Root;
 
 	// Components
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret")
-	//UStaticMeshComponent* Turret;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret")
+	UStaticMeshComponent* Tower;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Base")
 	UStaticMeshComponent* Base;
@@ -73,5 +73,10 @@ private:
 	// Aiming timer
 	FTimerHandle AimingTimerHandle;
 
+	// Locks on target
 	void LockOn(const AActor* Target, float Time);
+
+	void Fire(const AActor* Target);
+
+	double LastFireTime;
 };
