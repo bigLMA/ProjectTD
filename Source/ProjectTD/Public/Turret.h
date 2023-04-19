@@ -21,9 +21,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	// Fire with at target with projectile
-	virtual void Fire();
-
 	// Aim at special location
 	UFUNCTION(BlueprintCallable, Category = "Aiming")
 	void AimAt(const AActor* Target);
@@ -44,7 +41,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire rate", meta = (ClampMin = 0.1, UIMin = 0.1))
 	float ReloadTime;
 
-	//TODO Projectile class
+	//Class of projectile fired
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile class")
+	TSubclassOf<class ATurretProjectile> ProjectileClass;
 
 	// Turret rotation per second
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret rotation")
@@ -60,8 +59,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Base")
 	UStaticMeshComponent* Base;
 
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Shoot Colision")
-	//class USphereComponent* ShootColision;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Shoot Colision")
+	class USphereComponent* ShootColision;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Shoot Decal")
 	UDecalComponent* ShootDecal;
@@ -76,7 +75,9 @@ private:
 	// Locks on target
 	void LockOn(const AActor* Target, float Time);
 
+	// Fires at target
 	void Fire(const AActor* Target);
+
 
 	double LastFireTime;
 };

@@ -3,11 +3,13 @@
 
 #include "Turret.h"
 #include "Components/DecalComponent.h"
+#include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "TurretProjectile.h"
 
 // Sets default values
 ATurret::ATurret()
-	:RotationSpeed(6.5f), Cost(10), ReloadTime(1.2f), Damage(15)
+	:RotationSpeed(6.5f), Cost(10), ReloadTime(1.7f), Damage(15)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -22,10 +24,12 @@ ATurret::ATurret()
 	Tower = CreateDefaultSubobject<UStaticMeshComponent>("Tower");
 	Tower->SetupAttachment(Base);
 
+	ShootColision = CreateDefaultSubobject<USphereComponent>("Shoot collision");
+	ShootColision->SetupAttachment(Tower);
+
 	ShootDecal = CreateDefaultSubobject<UDecalComponent>("Shoot Decal");
 	ShootDecal->SetupAttachment(Root);
 	ShootDecal->SetAutoActivate(false);
-	//ShootDecal->SetActive(false);
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +37,7 @@ void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ShootDecal->SetActive(false);
 	LastFireTime = FPlatformTime::Seconds();
 }
 
@@ -48,12 +53,6 @@ void ATurret::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-}
-
-// Fire with at target with projectile
-void ATurret::Fire()
-{
-	//TODO
 }
 
 // Aim at special location
@@ -102,6 +101,10 @@ void ATurret::LockOn(const AActor* Target, float Time)
 void ATurret::Fire(const AActor* Target)
 {
 	LastFireTime = FPlatformTime::Seconds();
-	// TODO Spawn projectile
-	UE_LOG(LogTemp, Warning, TEXT("Foier"));
+
+	FActorSpawnParameters Params;
+	auto Projectile = GetWorld()->SpawnActor<ATurretProjectile>(ProjectileClass, 
+		ShootColision->GetComponentLocation(), Tower->GetRelativeRotation(),
+		Params);
+	Projectile->ActivateProjectile(Target, Damage);
 }
