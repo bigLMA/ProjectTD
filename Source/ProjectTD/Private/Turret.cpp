@@ -73,6 +73,12 @@ void ATurret::AimAt(const AActor* Target)
 	}
 }
 
+// Upgrade turret
+void ATurret::Upgrade(EUpgradeType UpgradeType)
+{
+	// TODO Upgrades
+}
+
 // Locks on target
 void ATurret::LockOn(const AActor* Target, float Time)
 {

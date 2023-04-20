@@ -8,6 +8,30 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTargetLostDelegate, const FVector& , Location)
 
+UENUM()
+enum class EUpgradeType : uint8
+{
+	DamageToEnemies, DamageToShields, Slow, BurningDamage, ReloadTime
+};
+
+USTRUCT(BlueprintType)
+struct FUpgrades
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade type")
+	EUpgradeType UpgradeType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Current level")
+	int32 CurrentLevel;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Max level")
+	int32 MaxLevel;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Max level")
+	float ValuePerLevel;
+};
+
 UCLASS()
 class PROJECTTD_API ATurret : public APawn
 {
@@ -27,6 +51,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Aiming")
 	void AimAt(const AActor* Target);
 
+	// Upgrade turret
+	UFUNCTION(BlueprintCallable, Category = "Upgrades")
+	void Upgrade(EUpgradeType UpgradeType);
+
+	// Delegate, called when target is lost
 	FTargetLostDelegate OnTargetLost;
 
 protected:
@@ -60,6 +89,10 @@ protected:
 	// Speed of firing new projectiles
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire rate", meta = (ClampMin = 0.1, UIMin = 0.1))
 	float ReloadTime;
+
+	// Possible upgrades of turret
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrades")
+	FUpgrades Upgrades;
 
 	//Class of projectile fired
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile class")
