@@ -9,7 +9,7 @@
 
 // Sets default values
 ATurret::ATurret()
-	:RotationSpeed(9.5f), Cost(10), ReloadTime(0.6f), Damage(15)
+	:RotationSpeed(9.5f), Cost(10), ReloadTime(0.6f), Damage(15), DamageToEnemies(1), DamageToShields(1)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -106,7 +106,7 @@ void ATurret::Fire(const AActor* Target)
 		auto Projectile = GetWorld()->SpawnActor<ATurretProjectile>(ProjectileClass,
 			ShootColision->GetComponentLocation(), Tower->GetRelativeRotation(),
 			Params);
-		Projectile->ActivateProjectile(Target, Damage);
+		Projectile->ActivateProjectile(Target, Damage, DamageToEnemies, DamageToShields);
 	}
 	else
 	{

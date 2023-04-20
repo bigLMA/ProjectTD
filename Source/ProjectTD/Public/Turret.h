@@ -33,6 +33,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Name of turret
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Name")
+	FText TurretName;
+
+	// Turret descriptiopn, a brief text of what turret is doing
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Description")
+	FText TurretDescription;
+
 	// Cost of turret to build
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost", meta = (ClampMin = 1, UIMin = 1))
 	int32 Cost;
@@ -40,6 +48,14 @@ protected:
 	// Damage of turret
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage", meta = (ClampMin = 1, UIMin = 1))
 	int32 Damage;
+
+	// Damage to multiply when damaging enemies
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage", meta = (ClampMin = 0.1f, UIMin = 0.1f, ClampMax = 2.3f, UIMax = 2.3f))
+	float DamageToEnemies;
+
+	// Damage to multiply when damaging shields
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage", meta = (ClampMin = 0.1f, UIMin = 0.1f, ClampMax = 2.3f, UIMax = 2.3f))
+	float DamageToShields;
 
 	// Speed of firing new projectiles
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire rate", meta = (ClampMin = 0.1, UIMin = 0.1))

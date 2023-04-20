@@ -16,7 +16,7 @@ public:
 	ATurretProjectile();
 
 	// Called when turret shoots with projectile
-	void ActivateProjectile(const AActor* Target, int32 DamageToSet);
+	void ActivateProjectile(const AActor* Target, int32 DamageToSet, float EnemyDamage, float ShieldDamage);
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,4 +42,8 @@ protected:
 private:
 	// Damage to deliver
 	int32 Damage;
+
+	// Damage multipliers for different target types
+	float DamageToEnemies;
+	float DamageToShields;
 };

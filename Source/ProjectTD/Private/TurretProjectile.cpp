@@ -9,14 +9,12 @@
 
 // Sets default values
 ATurretProjectile::ATurretProjectile()
-	:Damage(0), ProjectileSpeed(1500.f)
+	:ProjectileSpeed(1500.f), Damage(0), DamageToEnemies(0.f), DamageToShields(0.f)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	// Initialize components
-//	ProjectileCollision = CreateDefaultSubobject<USphereComponent>("Collision");
-	//ProjectileCollision->
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	SetRootComponent(ProjectileMesh);
 	ProjectileMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -39,9 +37,13 @@ void ATurretProjectile::BeginPlay()
 	
 }
 
-//
-void ATurretProjectile::ActivateProjectile(const AActor* Target, int32 DamageToSet)
+// Called when turret shoots with projectile
+void ATurretProjectile::ActivateProjectile(const AActor* Target, int32 DamageToSet, float EnemyDamage, float ShieldDamage)
 {
+	// Set damage modifiers
+	DamageToEnemies = EnemyDamage;
+	DamageToShields = ShieldDamage;
+
 	// Launch projectile
 	ProjectileMovement->SetActive(true);
 	ProjectileMovement->SetVelocityInLocalSpace(FVector::ForwardVector * ProjectileSpeed);
@@ -60,14 +62,27 @@ void ATurretProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 {
 	if (auto Shield = Cast<UShieldComponent>(OtherComponent))
 	{
-		//TODO for shields
-		Shield->RecieveDamage(Damage);
+		// Calculate damage to shield
+		float FDamageToShield = static_cast<float>(Damage) * DamageToShields;
+		int32 DamageToShield = static_cast<int32>(FDamageToShield);
+
+		// Damage shield
+		Shield->RecieveDamage(DamageToShield);
+
+		// Destroy projectile
 		Destroy();
 		return;
 	}
 	else if (auto Enemy = Cast<AEnemy>(OtherActor))
 	{
-		Enemy->ReceiveDamage(Damage);
+		// Calculate damage to enemy
+		float FDamageToEnemy = static_cast<float>(Damage) * DamageToEnemies;
+		int32 DamageToEnemy = static_cast<int32>(FDamageToEnemy);
+
+		// Damage Enemy
+		Enemy->ReceiveDamage(DamageToEnemy);
+
+		// Destroy projectile
 		Destroy();
 		return;
 	}

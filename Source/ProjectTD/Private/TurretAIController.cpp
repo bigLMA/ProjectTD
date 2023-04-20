@@ -88,7 +88,6 @@ void ATurretAIController::TargetPerceptionUpdated(AActor* Actor, FAIStimulus Sti
 // Called when enemy left line of sight and controller needs to target new enemy
 void ATurretAIController::GetClosestEnemyToTarget(const FVector& Location)
 {
-	UE_LOG(LogTemp, Warning, TEXT("checking"));
 	TArray<AActor*> DetectedActors;
 	AIPerceptionComponent->GetCurrentlyPerceivedActors(UAISenseConfig_Sight::StaticClass(), DetectedActors);
 
