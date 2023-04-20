@@ -11,7 +11,7 @@
 
 // Sets default values
 AEnemy::AEnemy()
-: Bounty(10), BountyBase(10), BountyDispersion(0), MaxHealth(50), DistanceThreshold(70), DamageToBase(7)
+: Bounty(10), BountyBase(10), BountyDispersion(0), MaxHealth(50), DistanceThreshold(130), DamageToBase(7)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -71,13 +71,13 @@ void AEnemy::ApplyBurning(int32 BurningDamage, float BurningDuration, float Burn
 	if (CheckForEffect(EEffects::Burning, Index))
 	{
 		// Renew effect timer
-
+		GetWorld()->GetTimerManager().ClearTimer(BurningTimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(BurningTimerHandle,
+			this, &AEnemy::OnBurningDamageTimerFinished, BurningDuration, false);
 	}
 	else
 	{
 		// Apply effect
-	//	auto TakeBurningDamage = [&](int32 BurningDamage) {TakeDamageFromBurning(BurningDamage);
-
 		GetWorld()->GetTimerManager().SetTimer(BurningTimerHandle, 
 			this, &AEnemy::OnBurningDamageTimerFinished, BurningDuration, false);
 		GetWorld()->GetTimerManager().SetTimer(BurningDamageTimerHandle, [this, BurningDamage]()
@@ -205,10 +205,10 @@ void AEnemy::WalkToNextTarget()
 		++TargetIndex;
 		FVector TargetLocation;
 		Path->GetLocationFromIndex(TargetIndex, TargetLocation);
-
+		
 		if (auto AIController = GetController<AAIController>())
 		{
-			AIController->MoveToLocation(TargetLocation);
+			AIController->MoveToLocation(TargetLocation, 0.f, false, true, true, false);
 			GetWorld()->GetTimerManager().SetTimer(TimerProximityTimerHandle,
 				this, &AEnemy::CheckTargetProximity, 0.1f, true);
 		}
@@ -225,15 +225,14 @@ void AEnemy::CheckTargetProximity()
 	{
 		FVector TargetLocation;
 		Path->GetLocationFromIndex(TargetIndex, TargetLocation);
+		auto VDistance = Mesh->GetComponentLocation() - TargetLocation;
+		float Distance = VDistance.Size();
 
 		// Check if distance to target is less or equal then threshold
-		auto VDistance = GetActorLocation() - TargetLocation;
-		float Distance = VDistance.Size();
-		
 		if (Distance <= DistanceThreshold)
 		{
-			GetWorld()->GetTimerManager().ClearTimer(TimerProximityTimerHandle);
 			// Order enemy to walk to next target
+			GetWorld()->GetTimerManager().ClearTimer(TimerProximityTimerHandle);
 			WalkToNextTarget();
 		}
 	}

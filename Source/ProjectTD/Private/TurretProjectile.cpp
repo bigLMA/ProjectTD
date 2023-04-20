@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Enemy.h"
+#include "ShieldComponent.h"
 
 // Sets default values
 ATurretProjectile::ATurretProjectile()
@@ -34,7 +35,7 @@ void ATurretProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnActorHit.AddDynamic(this, &ATurretProjectile::OnHit);
+	ProjectileMesh->OnComponentHit.AddDynamic(this, &ATurretProjectile::OnHit);
 	
 }
 
@@ -54,18 +55,22 @@ void ATurretProjectile::ActivateProjectile(const AActor* Target, int32 DamageToS
 	Damage = DamageToSet;
 }
 
-//
-void ATurretProjectile::OnHit(AActor* HitActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
+// Called when hits
+void ATurretProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	
-
-	if (auto Enemy = Cast<AEnemy>(OtherActor))
-	{
-		Enemy->ReceiveDamage(Damage);
-	}
-	else
+	if (auto Shield = Cast<UShieldComponent>(OtherComponent))
 	{
 		//TODO for shields
+		Shield->RecieveDamage(Damage);
+		Destroy();
+		return;
 	}
+	else if (auto Enemy = Cast<AEnemy>(OtherActor))
+	{
+		Enemy->ReceiveDamage(Damage);
+		Destroy();
+		return;
+	}
+
 	Destroy();
 }

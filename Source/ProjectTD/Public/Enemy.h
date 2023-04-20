@@ -49,6 +49,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Used to check enemy proximity to target
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Distance Threshold", meta = (ClampMin = 1, UIMin = 1))
+	float DistanceThreshold;
+
 	// Maximum health of enemy
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health", meta = (ClampMin = 1, UIMin = 1))
 	int32 MaxHealth;
@@ -109,9 +113,6 @@ private:
 
 	// Used to get location from path
 	int TargetIndex;
-
-	// Used to check enemy proximity to target
-	float DistanceThreshold;
 
 	// Removes slow from enemy
 	void RemoveSlow();
