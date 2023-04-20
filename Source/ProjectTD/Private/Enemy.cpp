@@ -11,7 +11,7 @@
 
 // Sets default values
 AEnemy::AEnemy()
-: Bounty(10), BountyBase(10), BountyDispersion(0), MaxHealth(50), DistanceThreshold(70)
+: Bounty(10), BountyBase(10), BountyDispersion(0), MaxHealth(50), DistanceThreshold(70), DamageToBase(7)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -134,6 +134,11 @@ void AEnemy::ApplySlow(float SlowStrength, float SlowDuration)
 FVector AEnemy::GetMeshLocation() const
 {
 	return Mesh->GetComponentLocation();
+}
+
+int32 AEnemy::GetDamage() const
+{
+	return DamageToBase;
 }
 
 // Removes slow from enemy

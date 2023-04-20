@@ -42,6 +42,8 @@ public:
 
 	FVector GetMeshLocation() const;
 
+	int32 GetDamage()const;
+
 protected:
 
 	// Called when the game starts or when spawned
@@ -71,6 +73,9 @@ protected:
 	// Initial speed of enemy
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float InitialSpeed;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
+	int32 DamageToBase;
 
 	// Immunity to negative effects
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Immunities")
