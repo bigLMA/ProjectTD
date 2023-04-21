@@ -26,10 +26,13 @@ ATurret::ATurret()
 
 	ShootColision = CreateDefaultSubobject<USphereComponent>("Shoot collision");
 	ShootColision->SetupAttachment(Tower);
+	ShootColision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	ShootDecal = CreateDefaultSubobject<UDecalComponent>("Shoot Decal");
 	ShootDecal->SetupAttachment(Root);
-	ShootDecal->SetAutoActivate(false);
+	ShootDecal->SetVisibility(false);
+	//ShootDecal->SetAutoActivate(false);
+	//ShootDecal->SetActive(false);
 }
 
 // Called when the game starts or when spawned
@@ -37,7 +40,6 @@ void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ShootDecal->SetActive(false);
 	LastFireTime = FPlatformTime::Seconds();
 }
 
@@ -112,11 +114,17 @@ void ATurret::Fire(const AActor* Target)
 		auto Projectile = GetWorld()->SpawnActor<ATurretProjectile>(ProjectileClass,
 			ShootColision->GetComponentLocation(), Tower->GetRelativeRotation(),
 			Params);
-		Projectile->ActivateProjectile(Target, Damage, DamageToEnemies, DamageToShields);
+		PrepareProjectile(Projectile, Target);
 	}
 	else
 	{
 		const FVector& Location = GetActorLocation();
 		OnTargetLost.Broadcast(Location);
 	}
+}
+
+// Sets projectile variables, activates movement
+void ATurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)
+{
+	Projectile->ActivateProjectile(Target, Damage, DamageToEnemies, DamageToShields);
 }

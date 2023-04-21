@@ -40,10 +40,11 @@ protected:
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 private:
-	// Damage to deliver
-	int32 Damage;
 
 	// Damage multipliers for different target types
 	float DamageToEnemies;
 	float DamageToShields;
+
+	// Damage to deliver
+	int32 Damage;
 };

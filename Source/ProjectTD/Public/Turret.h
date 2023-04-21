@@ -53,7 +53,7 @@ public:
 
 	// Upgrade turret
 	UFUNCTION(BlueprintCallable, Category = "Upgrades")
-	void Upgrade(EUpgradeType UpgradeType);
+	virtual void Upgrade(EUpgradeType UpgradeType);
 
 	// Delegate, called when target is lost
 	FTargetLostDelegate OnTargetLost;
@@ -79,11 +79,11 @@ protected:
 	int32 Damage;
 
 	// Damage to multiply when damaging enemies
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage", meta = (ClampMin = 0.1f, UIMin = 0.1f, ClampMax = 2.3f, UIMax = 2.3f))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage", meta = (ClampMin = 0.1f, UIMin = 0.1f, ClampMax = 3.f, UIMax = 3.f))
 	float DamageToEnemies;
 
 	// Damage to multiply when damaging shields
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage", meta = (ClampMin = 0.1f, UIMin = 0.1f, ClampMax = 2.3f, UIMax = 2.3f))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage", meta = (ClampMin = 0.1f, UIMin = 0.1f, ClampMax = 3.f, UIMax = 3.f))
 	float DamageToShields;
 
 	// Speed of firing new projectiles
@@ -118,10 +118,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Shoot Decal")
 	UDecalComponent* ShootDecal;
 
-private:	
-	//Target of the turret
-	//class AEnemy* Target;
+	// Sets projectile variables, activates movement
+	UFUNCTION(BlueprintCallable, Category = "Projectile setting")
+	virtual void PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target);
 
+private:
 	// Aiming timer
 	FTimerHandle AimingTimerHandle;
 
