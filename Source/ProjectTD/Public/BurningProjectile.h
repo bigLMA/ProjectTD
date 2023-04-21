@@ -4,25 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "TurretProjectile.h"
-#include "SlowProjectile.generated.h"
+#include "BurningProjectile.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTTD_API ASlowProjectile : public ATurretProjectile
+class PROJECTTD_API ABurningProjectile : public ATurretProjectile
 {
 	GENERATED_BODY()
-
 public:
-	void SetSlowProperties(float Strength, float Duration);
+	// Sets burning properties
+	void SetBurningProperties(int32 BDamage, float BDuration, float BInterval);
 
 protected:
 	// Called when hits
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 private:
-	// Slow properties
-	float SlowStrength;
-	float SlowDuration;
+	// Burning properties
+	int32 BurningDamage;
+	float BurningDuration;
+	float BurningInterval;
 };

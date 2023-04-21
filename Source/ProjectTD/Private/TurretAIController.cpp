@@ -14,8 +14,8 @@ ATurretAIController::ATurretAIController(const FObjectInitializer& ObjectInitial
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AIPerception");
 	UAISenseConfig_Sight* SightConfig = NewObject<UAISenseConfig_Sight>(this, TEXT("Sight Config"));
 	//TSharedPtr<UAISenseConfig_Sight> SightConfig = MakeShared<UAISenseConfig_Sight>();
-	SightConfig->SightRadius = 400.f;
-	SightConfig->LoseSightRadius = 400.f;
+	SightConfig->SightRadius = 500.f;
+	SightConfig->LoseSightRadius = 500.f;
 	SightConfig->PeripheralVisionAngleDegrees = 180;
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;

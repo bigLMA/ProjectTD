@@ -15,6 +15,7 @@ void ASlowProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
 {
 	if (auto Enemy = Cast<AEnemy>(OtherActor))
 	{
+		// Apply slow on enemy
 		Enemy->ApplySlow(SlowStrength, SlowDuration);
 	}
 
