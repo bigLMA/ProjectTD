@@ -44,6 +44,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Slow")
 	void ApplySlow(float SlowStrength, float SlowDuration);
 
+	// Regenerates health
+	void Regenerate(int32 HealthToAdd);
+
 	FVector GetMeshLocation() const;
 
 	int32 GetDamage()const;

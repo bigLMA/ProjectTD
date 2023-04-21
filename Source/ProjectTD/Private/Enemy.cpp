@@ -164,6 +164,13 @@ void AEnemy::ApplySlow(float SlowStrength, float SlowDuration)
 	}
 }
 
+// Regenerates health
+void AEnemy::Regenerate(int32 HealthToAdd)
+{
+	Health += HealthToAdd;
+	Health = FMath::Clamp(Health, 0, MaxHealth);
+}
+
 FVector AEnemy::GetMeshLocation() const
 {
 	return Mesh->GetComponentLocation();
