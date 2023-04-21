@@ -11,7 +11,7 @@
 
 // Sets default values
 AEnemy::AEnemy()
-: Bounty(10), BountyBase(10), BountyDispersion(0), MaxHealth(50), DistanceThreshold(130), DamageToBase(7)
+: Bounty(10), BountyBase(10), BountyDispersion(0), MaxHealth(50), InitialArmour(10), DistanceThreshold(130), DamageToBase(7)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -49,7 +49,12 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 // Called when enemy takes damage
 void AEnemy::ReceiveDamage(int32 Damage)
 {
-	Health -= Damage;
+	// Check damage against armour, 
+	// leave function if damage dealt would be less than 1
+	int32 DamageDealt = Damage - Armour;
+	if (DamageDealt <= 0) { return; }
+
+	Health -= DamageDealt;
 
 	if (Health <= 0)
 	{
@@ -90,8 +95,36 @@ void AEnemy::ApplyBurning(int32 BurningDamage, float BurningDuration, float Burn
 // Called when bunribg efferct finishes
 void AEnemy::OnBurningDamageTimerFinished()
 {
+	Effects.RemoveSingle(EEffects::Burning);
 	GetWorld()->GetTimerManager().ClearTimer(BurningTimerHandle);
 	GetWorld()->GetTimerManager().ClearTimer(BurningDamageTimerHandle);
+}
+
+// Called when enemy armour is broken
+void AEnemy::ApplyArmourBreak(int32 ArmourDamage, float BreakDuration)
+{
+	int Index = -1;
+
+	if (CheckForImmunity(EEffects::Armour_Break, Index)) { return; }
+
+	// Ñheck if enemy already has effect applied
+	if (CheckForImmunity(EEffects::Armour_Break, Index))
+	{
+		// Renew effect
+		GetWorld()->GetTimerManager().ClearTimer(ArmourBreakTimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(ArmourBreakTimerHandle,
+			this, &AEnemy::RemoveSlow, BreakDuration, false);
+	}
+	else
+	{
+		Effects.Add(EEffects::Armour_Break);
+		Armour -= ArmourDamage;
+		GetWorld()->GetTimerManager().SetTimer(ArmourBreakTimerHandle,
+			this, &AEnemy::RemoveArmourBreak, 
+			BreakDuration, false);
+	}
+
+	
 }
 
 // Called when enemy takes damage over time from burning
@@ -148,6 +181,13 @@ void AEnemy::RemoveSlow()
 	FloatingPawnComponent->MaxSpeed = InitialSpeed;
 }
 
+// Removes armour break
+void AEnemy::RemoveArmourBreak()
+{
+	Effects.RemoveSingle(EEffects::Armour_Break);
+	Armour = InitialArmour;
+}
+
 // Plays when enemy die
 void AEnemy::Die()
 {
@@ -178,6 +218,7 @@ bool AEnemy::CheckForEffect(EEffects Effect, int32& Index)
 void AEnemy::InitializeEnemy()
 {
 	Health = MaxHealth;
+	Armour = InitialArmour;
 	InitialSpeed = FloatingPawnComponent->MaxSpeed;
 	RandomizeEnemyBounty();
 }

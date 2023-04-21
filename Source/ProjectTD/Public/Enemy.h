@@ -9,7 +9,7 @@
 UENUM()
 enum class EEffects :uint8
 {
-	Slow, Burning
+	Slow, Burning, Armour_Break
 };
 
 UCLASS()
@@ -36,6 +36,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Burning")
 	void OnBurningDamageTimerFinished();
 
+	// Called when enemy armour is broken
+	UFUNCTION(BlueprintCallable, Category = "Armour Break")
+	void ApplyArmourBreak(int32 ArmourDamage, float BreakDuration);
+
 	// Apply slow on Enemy
 	UFUNCTION(BlueprintCallable, Category = "Slow")
 	void ApplySlow(float SlowStrength, float SlowDuration);
@@ -60,6 +64,14 @@ protected:
 	// Current health of enemy
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	int32 Health;
+
+	// Cuts all damage by flat amount
+	UPROPERTY(BlueprintReadOnly, Category = "Armour")
+	int32 Armour;
+
+	// Initial enemy armour
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Armour", meta = (ClampMin = -100, UIMin = -100, ClampMan = 100, UIMax = 100))
+	int32 InitialArmour;
 
 	// Bounty value for killing enemy
 	UPROPERTY(BlueprintReadOnly, Category = "Rewards", meta = (ClampMin = 1, UIMin = 1))
@@ -117,6 +129,9 @@ private:
 	// Removes slow from enemy
 	void RemoveSlow();
 
+	// Removes armour break
+	void RemoveArmourBreak();
+
 	// Plays when enemy die
 	void Die();
 
@@ -144,6 +159,9 @@ private:
 
 	// Timer handle for slow effect
 	FTimerHandle SlowTimerHandle;
+
+	// Timer handle for armour break effect
+	FTimerHandle ArmourBreakTimerHandle;
 
 	// Enemy effects
 	TArray<EEffects>Effects;

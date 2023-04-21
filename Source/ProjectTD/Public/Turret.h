@@ -22,6 +22,9 @@ struct FUpgrades
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade type")
 	EUpgradeType UpgradeType;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade cost")
+	int32 UpgradeCostPerLevel;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Current level")
 	int32 CurrentLevel;
 
