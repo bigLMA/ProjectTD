@@ -11,7 +11,7 @@ ABurningTurret::ABurningTurret()
 
 void ABurningTurret::Upgrade(EUpgradeType UpgradeType)
 {
-	//TODO Upgrade
+	Super::Upgrade(UpgradeType);
 }
 
 void ABurningTurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)

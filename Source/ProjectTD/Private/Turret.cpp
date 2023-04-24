@@ -9,7 +9,14 @@
 
 // Sets default values
 ATurret::ATurret()
-	:RotationSpeed(9.5f), Cost(10), ReloadTime(0.6f), Damage(15), DamageToEnemies(1), DamageToShields(1)
+	:RotationSpeed(9.5f), 
+	Cost(10),
+	ReloadTime(0.6f),
+	Damage(15),
+	DamageToEnemies(1),
+	DamageToShields(1), 
+	SplashDamageModifier(0.2f),
+	MultitargetDamageModifier(0.1f)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -78,7 +85,31 @@ void ATurret::AimAt(const AActor* Target)
 // Upgrade turret
 void ATurret::Upgrade(EUpgradeType UpgradeType)
 {
-	// TODO Upgrades
+	int32 Index;
+	int32 Level;
+
+	if (!CheckForUpgrade(UpgradeType, Level, Index, 1)) { UE_LOG(LogTemp, Warning, TEXT("NO DAMAGE"));
+	return; }
+
+	switch (UpgradeType)
+	{
+	case EUpgradeType::Damage:
+		Damage += static_cast<int32>(Upgrades[Index].ValuePerLevel);
+		++Upgrades[Index].CurrentLevel;
+		break;
+	case EUpgradeType::DamageToEnemies:
+		break;
+	case EUpgradeType::DamageToShields:
+		break;
+	case EUpgradeType::ReloadTime:
+		break;
+	case EUpgradeType::Splash:
+		break;
+	case EUpgradeType::Multitarget:
+		break;
+	default:
+		break;
+	}
 }
 
 // Locks on target
@@ -103,6 +134,24 @@ void ATurret::LockOn(const AActor* Target, float Time)
 	{
 		Fire(Target);
 	}
+}
+
+// Check for at least one level of upgrade.
+// Returns level of upgrade if has one and index in array
+// "int32 UpgradeIndex" is for checking if class has ability to upgrade, not current upgrades
+bool ATurret::CheckForUpgrade(EUpgradeType UpgradeType, int32& UpgradeLevel, int32& Index, int32 UpgradeIndex)
+{
+	for (int32 j = 0; j < Upgrades.Num(); ++j)
+	{
+		if (Upgrades[j].UpgradeType == UpgradeType && Upgrades[j].CurrentLevel+UpgradeIndex > 0)
+		{
+			UpgradeLevel = Upgrades[j].CurrentLevel;
+			Index = j;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void ATurret::Fire(const AActor* Target)

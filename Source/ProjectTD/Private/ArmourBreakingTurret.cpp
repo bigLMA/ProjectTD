@@ -11,7 +11,7 @@ AArmourBreakingTurret::AArmourBreakingTurret()
 
 void AArmourBreakingTurret::Upgrade(EUpgradeType UpgradeType)
 {
-	//TODO Uprgrades
+	Super::Upgrade(UpgradeType);
 }
 
 void AArmourBreakingTurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)

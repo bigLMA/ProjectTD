@@ -11,7 +11,7 @@ ASlowTurret::ASlowTurret()
 
 void ASlowTurret::Upgrade(EUpgradeType UpgradeType)
 {
-	//TODO Upgrades
+	Super::Upgrade(UpgradeType);
 }
 
 void ASlowTurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)

@@ -11,7 +11,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTargetLostDelegate, const FVector& 
 UENUM()
 enum class EUpgradeType : uint8
 {
-	DamageToEnemies, DamageToShields, Slow, BurningDamage, ReloadTime
+	Damage, DamageToEnemies, DamageToShields, Slow, BurningDamage, ReloadTime, Splash, Multitarget, ArmourPenetrarion
 };
 
 USTRUCT(BlueprintType)
@@ -31,7 +31,7 @@ struct FUpgrades
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Max level")
 	int32 MaxLevel;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Max level")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Value per level")
 	float ValuePerLevel;
 };
 
@@ -93,9 +93,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire rate", meta = (ClampMin = 0.1, UIMin = 0.1))
 	float ReloadTime;
 
+	// How much the damage from splash would be modified
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Splash damage modifier", meta = (ClampMin = 0.1, UIMin = 0.1, ClampMax= 1.2, UIMax = 1.2))
+	float SplashDamageModifier;
+
+	// How much the damage from multitarget would be modified
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Multitarget damage modifier", meta = (ClampMin = 0.1, UIMin = 0.1, ClampMax =0.8, UIMax = 0.8))
+	float MultitargetDamageModifier;
+
 	// Possible upgrades of turret
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrades")
-	FUpgrades Upgrades;
+	TArray<FUpgrades> Upgrades;
 
 	//Class of projectile fired
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile class")
@@ -105,10 +113,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret rotation")
 	float RotationSpeed;
 
+	// Components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Base")
 	USceneComponent* Root;
 
-	// Components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret")
 	UStaticMeshComponent* Tower;
 
@@ -131,6 +139,11 @@ private:
 
 	// Locks on target
 	void LockOn(const AActor* Target, float Time);
+
+	// Check for at least one level of upgrade.
+	// Returns level of upgrade if has one and index in array
+	// "int32 UpgradeIndex" is for checking if class has ability to upgrade, not current upgrades
+	bool CheckForUpgrade(EUpgradeType UpgradeType, int32& UpgradeLevel, int32& Index, int32 UpgradeIndex = 0);
 
 	// Fires at target
 	void Fire(const AActor* Target);
