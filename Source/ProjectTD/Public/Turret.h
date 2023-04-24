@@ -7,7 +7,7 @@
 #include "Turret.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTargetLostDelegate, const FVector& , Location)
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultitargetShootingDelegate, float, Radius)
 UENUM()
 enum class EUpgradeType : uint8
 {
@@ -54,12 +54,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Aiming")
 	void AimAt(const AActor* Target);
 
+	// Fires at target
+	void Fire(const AActor* Target);
+
 	// Upgrade turret
 	UFUNCTION(BlueprintCallable, Category = "Upgrades")
 	virtual void Upgrade(EUpgradeType UpgradeType);
 
 	// Delegate, called when target is lost
 	FTargetLostDelegate OnTargetLost;
+
+	// Delegate to shoot additional targets
+	FMultitargetShootingDelegate OnShoot;
 
 protected:
 	// Called when the game starts or when spawned
@@ -144,8 +150,8 @@ private:
 	// Locks on target
 	void LockOn(const AActor* Target, float Time);
 
-	// Fires at target
-	void Fire(const AActor* Target);
+	// MultitargetRadius
+	float MultitargetRadius;
 
 	double LastFireTime;
 };

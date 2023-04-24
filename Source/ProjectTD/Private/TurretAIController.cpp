@@ -32,7 +32,19 @@ void ATurretAIController::BeginPlay()
 	if (AIPerceptionComponent) 
 	{
 		AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ATurretAIController::TargetPerceptionUpdated);
-		//AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, )
+	}
+}
+
+// Called when setting pawn
+void ATurretAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	// Bound looking for enemy when target is lost
+	if (auto TurretPawn = Cast<ATurret>(InPawn))
+	{
+		TurretPawn->OnTargetLost.AddUniqueDynamic(this, &ATurretAIController::GetClosestEnemyToTarget);
+		TurretPawn->OnShoot.AddUniqueDynamic(this, &ATurretAIController::ShootAdditionalTargets);
 	}
 }
 
@@ -46,18 +58,6 @@ void ATurretAIController::SetTarget(AEnemy* NewTarget)
 	if (auto ControlledTurret = Cast<ATurret>(GetPawn()))
 	{
 		ControlledTurret->AimAt(TargetActor);
-	}
-}
-
-// Called when setting pawn
-void ATurretAIController::SetPawn(APawn* InPawn)
-{
-	Super::SetPawn(InPawn);
-
-	// Bound looking for enemy when target is lost
-	if (auto TurretPawn = Cast<ATurret>(InPawn))
-	{
-		TurretPawn->OnTargetLost.AddUniqueDynamic(this, &ATurretAIController::GetClosestEnemyToTarget);
 	}
 }
 
@@ -115,5 +115,35 @@ void ATurretAIController::GetClosestEnemyToTarget(const FVector& Location)
 	else
 	{
 		SetTarget(nullptr);
+	}
+}
+
+// Called when turret is multitarget and shooting
+void ATurretAIController::ShootAdditionalTargets(float Radius)
+{
+	auto ControlledTurret = Cast<ATurret>(GetPawn());
+
+	if (!IsValid(ControlledTurret)) { return; }
+
+	TArray<AActor*> DetectedActors;
+	AIPerceptionComponent->GetCurrentlyPerceivedActors(UAISenseConfig_Sight::StaticClass(), DetectedActors);
+
+	int32 Index = 0;
+
+	for (auto DetectedActor : DetectedActors)
+	{
+		if (auto Enemy = Cast<AEnemy>(DetectedActor))
+		{
+			// Check if enemy is close enough to target
+			if (Enemy->GetDistanceTo(Target) <= Radius&& Enemy!=Target)
+			{
+				// Fire on enemy
+				ControlledTurret->Fire(Enemy);
+
+				// Only two enemies as multitarget targets
+				++Index;
+				if (Index >= 2) { return; }
+			}
+		}
 	}
 }

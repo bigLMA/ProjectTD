@@ -39,5 +39,9 @@ private:
 	UFUNCTION()
 	void GetClosestEnemyToTarget(const FVector& Location);
 
+	// Called when turret is multitarget and shooting
+	UFUNCTION()
+	void ShootAdditionalTargets(float Radius);
+
 	 AEnemy* Target;
 };

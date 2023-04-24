@@ -16,7 +16,8 @@ ATurret::ATurret()
 	DamageToEnemies(1),
 	DamageToShields(1), 
 	SplashDamageModifier(0.2f),
-	MultitargetDamageModifier(0.1f)
+	MultitargetDamageModifier(0.1f),
+	MultitargetRadius(400.f)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -38,8 +39,6 @@ ATurret::ATurret()
 	ShootDecal = CreateDefaultSubobject<UDecalComponent>("Shoot Decal");
 	ShootDecal->SetupAttachment(Root);
 	ShootDecal->SetVisibility(false);
-	//ShootDecal->SetAutoActivate(false);
-	//ShootDecal->SetActive(false);
 }
 
 // Called when the game starts or when spawned
@@ -140,6 +139,13 @@ void ATurret::LockOn(const AActor* Target, float Time)
 	if(FMath::Abs(Diff) < MinDiff && (FPlatformTime::Seconds() - LastFireTime) >= ReloadTime)
 	{
 		Fire(Target);
+
+		int32 Index;
+
+		if (CheckForUpgrade(EUpgradeType::Multitarget, Index))
+		{
+			OnShoot.Broadcast(MultitargetRadius);
+		}
 	}
 }
 
