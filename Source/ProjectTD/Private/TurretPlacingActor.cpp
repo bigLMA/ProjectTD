@@ -45,12 +45,14 @@ void ATurretPlacingActor::ErrectTurret(TSubclassOf<class ATurret> TurretClass)
 {
 	if (bIsPlaced) { return; }
 
+	// Spawn turret
 	FActorSpawnParameters Params;
 	FVector Location = GetActorLocation();
 	FRotator Rotation = GetActorRotation();
 	auto Turret = GetWorld()->SpawnActor<ATurret>(TurretClass, Location, Rotation, Params);	
 	bIsPlaced = true;
 
+	// Remove player money
 	if (auto Player = Cast<ACameraPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
 	{
 		Player->RemovePlayerMoney(Turret->GetCost());
