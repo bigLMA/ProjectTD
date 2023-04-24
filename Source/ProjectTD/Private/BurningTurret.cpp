@@ -12,6 +12,19 @@ ABurningTurret::ABurningTurret()
 void ABurningTurret::Upgrade(EUpgradeType UpgradeType)
 {
 	Super::Upgrade(UpgradeType);
+
+	int32 Index;
+
+	CheckForUpgrade(UpgradeType, Index);
+
+	switch (UpgradeType)
+	{
+	case EUpgradeType::BurningDamage:
+		BurningDamage+= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		break;
+	default:
+		break;
+	}
 }
 
 void ABurningTurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)

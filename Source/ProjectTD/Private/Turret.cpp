@@ -86,26 +86,32 @@ void ATurret::AimAt(const AActor* Target)
 void ATurret::Upgrade(EUpgradeType UpgradeType)
 {
 	int32 Index;
-	int32 Level;
 
-	if (!CheckForUpgrade(UpgradeType, Level, Index, 1)) { UE_LOG(LogTemp, Warning, TEXT("NO DAMAGE"));
-	return; }
+	// Check upgrade possibility
+	if (!CheckForUpgrade(UpgradeType, Index, 1)) { return; }
+	if (!IsValid(Upgrades[Index].Value)) { return; }
+	if (Upgrades[Index].CurrentLevel < Upgrades[Index].MaxLevel) { return; }
 
+	// Apply upgrades
 	switch (UpgradeType)
 	{
 	case EUpgradeType::Damage:
-		Damage += static_cast<int32>(Upgrades[Index].ValuePerLevel);
-		++Upgrades[Index].CurrentLevel;
+		Damage += static_cast<int32>(Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel));
 		break;
 	case EUpgradeType::DamageToEnemies:
+		DamageToEnemies += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::DamageToShields:
+		DamageToShields+= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::ReloadTime:
+		ReloadTime-= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::Splash:
+		SplashDamageModifier+= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::Multitarget:
+		MultitargetDamageModifier += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	default:
 		break;
@@ -136,16 +142,14 @@ void ATurret::LockOn(const AActor* Target, float Time)
 	}
 }
 
-// Check for at least one level of upgrade.
+// Check for at least one level of upgrade if UpgradeIndex is not set
 // Returns level of upgrade if has one and index in array
-// "int32 UpgradeIndex" is for checking if class has ability to upgrade, not current upgrades
-bool ATurret::CheckForUpgrade(EUpgradeType UpgradeType, int32& UpgradeLevel, int32& Index, int32 UpgradeIndex)
+bool ATurret::CheckForUpgrade(EUpgradeType UpgradeType, int32& Index, int32 UpgradeIndex)
 {
 	for (int32 j = 0; j < Upgrades.Num(); ++j)
 	{
 		if (Upgrades[j].UpgradeType == UpgradeType && Upgrades[j].CurrentLevel+UpgradeIndex > 0)
 		{
-			UpgradeLevel = Upgrades[j].CurrentLevel;
 			Index = j;
 			return true;
 		}

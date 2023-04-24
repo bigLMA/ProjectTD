@@ -12,6 +12,19 @@ ASlowTurret::ASlowTurret()
 void ASlowTurret::Upgrade(EUpgradeType UpgradeType)
 {
 	Super::Upgrade(UpgradeType);
+
+	int32 Index;
+
+	CheckForUpgrade(UpgradeType, Index);
+
+	switch (UpgradeType)
+	{
+	case EUpgradeType::Slow:
+		SlowStrength += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		break;
+	default:
+		break;
+	}
 }
 
 void ASlowTurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)

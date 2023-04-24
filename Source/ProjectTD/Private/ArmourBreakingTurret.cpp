@@ -12,6 +12,19 @@ AArmourBreakingTurret::AArmourBreakingTurret()
 void AArmourBreakingTurret::Upgrade(EUpgradeType UpgradeType)
 {
 	Super::Upgrade(UpgradeType);
+
+	int32 Index;
+
+	CheckForUpgrade(UpgradeType, Index);
+
+	switch (UpgradeType)
+	{
+	case EUpgradeType::ArmourPenetrarion:
+		ArmourBreakStrength += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		break;
+	default:
+		break;
+	}
 }
 
 void AArmourBreakingTurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)

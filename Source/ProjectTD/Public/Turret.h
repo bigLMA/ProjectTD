@@ -32,7 +32,7 @@ struct FUpgrades
 	int32 MaxLevel;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Value per level")
-	float ValuePerLevel;
+	UCurveFloat* Value;
 };
 
 UCLASS()
@@ -133,17 +133,16 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Projectile setting")
 	virtual void PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target);
 
+	// Check for at least one level of upgrade if UpgradeIndex is not set
+	// Returns level of upgrade if has one and index in array
+	bool CheckForUpgrade(EUpgradeType UpgradeType, int32& Index, int32 UpgradeIndex = 0);
+
 private:
 	// Aiming timer
 	FTimerHandle AimingTimerHandle;
 
 	// Locks on target
 	void LockOn(const AActor* Target, float Time);
-
-	// Check for at least one level of upgrade.
-	// Returns level of upgrade if has one and index in array
-	// "int32 UpgradeIndex" is for checking if class has ability to upgrade, not current upgrades
-	bool CheckForUpgrade(EUpgradeType UpgradeType, int32& UpgradeLevel, int32& Index, int32 UpgradeIndex = 0);
 
 	// Fires at target
 	void Fire(const AActor* Target);
