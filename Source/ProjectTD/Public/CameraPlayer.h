@@ -18,6 +18,10 @@ public:
 
 	// Adds bounty to money on killing enemy
 	void AddBounty(int32 Bounty);
+	
+	// Removes player money
+	UFUNCTION(BlueprintCallable, Category = "Money")
+	void RemovePlayerMoney(int32 MoneyToRemove);
 
 protected:
 	// Called when the game starts or when spawned

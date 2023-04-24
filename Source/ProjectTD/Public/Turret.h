@@ -23,7 +23,7 @@ struct FUpgrades
 	EUpgradeType UpgradeType;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade cost")
-	int32 UpgradeCostPerLevel;
+	UCurveFloat* UpgradeCost;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Current level")
 	int32 CurrentLevel;
@@ -61,6 +61,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Upgrades")
 	virtual void Upgrade(EUpgradeType UpgradeType);
 
+	int32 GetCost() const;
+
 	// Delegate, called when target is lost
 	FTargetLostDelegate OnTargetLost;
 
@@ -78,6 +80,10 @@ protected:
 	// Turret descriptiopn, a brief text of what turret is doing
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Description")
 	FText TurretDescription;
+
+	// Turret thumbnail
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Thumbnail")
+	UTexture2D* Thumbnail;
 
 	// Cost of turret to build
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cost", meta = (ClampMin = 1, UIMin = 1))

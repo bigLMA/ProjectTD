@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "TurretProjectile.h"
+#include "CameraPlayer.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -116,6 +118,16 @@ void ATurret::Upgrade(EUpgradeType UpgradeType)
 	default:
 		break;
 	}
+
+	if (auto Player = Cast<ACameraPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
+	{
+		Player->RemovePlayerMoney(Upgrades[Index].UpgradeCost->GetFloatValue(Upgrades[Index].CurrentLevel));
+	}
+}
+
+int32 ATurret::GetCost() const
+{
+	return Cost;
 }
 
 // Locks on target

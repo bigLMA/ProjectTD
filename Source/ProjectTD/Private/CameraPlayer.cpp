@@ -111,3 +111,8 @@ void ACameraPlayer::AddBounty(int32 Bounty)
 {
 	Money += Bounty;
 }
+
+void ACameraPlayer::RemovePlayerMoney(int32 MoneyToRemove)
+{
+	Money -= MoneyToRemove;
+}
