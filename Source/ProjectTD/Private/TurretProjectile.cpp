@@ -9,7 +9,7 @@
 
 // Sets default values
 ATurretProjectile::ATurretProjectile()
-	:ProjectileSpeed(1500.f), Damage(0), DamageToEnemies(0.f), DamageToShields(0.f)
+	:ProjectileSpeed(1500.f), Damage(0), DamageToEnemies(0.f), DamageToShields(0.f), SplashDamage(-1), SplashRadius(550.f)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -20,6 +20,11 @@ ATurretProjectile::ATurretProjectile()
 	ProjectileMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ProjectileMesh->SetCollisionObjectType(ECC_GameTraceChannel7);
 	ProjectileMesh->SetCollisionResponseToAllChannels(ECR_Block);
+
+	SplashCollision = CreateDefaultSubobject<USphereComponent>("Splash Collision");
+	SplashCollision->SetCollisionResponseToAllChannels(ECR_Overlap);
+	SplashCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SplashCollision->SetupAttachment(ProjectileMesh);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("Projectile movement");
 	ProjectileMovement->SetAutoActivate(false);
@@ -34,11 +39,11 @@ void ATurretProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &ATurretProjectile::OnHit);
-	
+	SplashCollision->SetSphereRadius(SplashRadius);
 }
 
 // Called when turret shoots with projectile
-void ATurretProjectile::ActivateProjectile(const AActor* Target, int32 DamageToSet, float EnemyDamage, float ShieldDamage)
+void ATurretProjectile::ActivateProjectile(const AActor* Target, int32 DamageToSet, float EnemyDamage, float ShieldDamage, int32 Splash)
 {
 	// Set damage modifiers
 	DamageToEnemies = EnemyDamage;
@@ -55,11 +60,33 @@ void ATurretProjectile::ActivateProjectile(const AActor* Target, int32 DamageToS
 	}
 
 	Damage = DamageToSet;
+	SplashDamage = Splash;
 }
 
 // Called when hits
 void ATurretProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
+	// Check for splash damage
+	if (SplashDamage > 0&& IsValid(SplashCollision))
+	{
+		TArray<AActor*> Actors;
+
+		SplashCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		SplashCollision->GetOverlappingActors(Actors);
+
+		// Apply splash damage for all enemies exept Hit actor
+		for (auto Actor : Actors)
+		{
+			if (Actor != OtherActor)
+			{
+				if (auto Enemy = Cast<AEnemy>(Actor))
+				{
+					Enemy->ReceiveDamage(SplashDamage);
+				}
+			}
+		}
+	}
+
 	if (auto Shield = Cast<UShieldComponent>(OtherComponent))
 	{
 		// Calculate damage to shield

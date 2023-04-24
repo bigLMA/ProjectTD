@@ -16,7 +16,7 @@ public:
 	ATurretProjectile();
 
 	// Called when turret shoots with projectile
-	void ActivateProjectile(const AActor* Target, int32 DamageToSet, float EnemyDamage, float ShieldDamage);
+	void ActivateProjectile(const AActor* Target, int32 DamageToSet, float EnemyDamage, float ShieldDamage, int32 Splash = -1);
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,8 +26,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile mesh")
 	UStaticMeshComponent* ProjectileMesh;
 
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile collision")
-	class USphereComponent* ProjectileCollision;*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile collision")
+	class USphereComponent* SplashCollision;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile movement")
 	class UProjectileMovementComponent* ProjectileMovement;
@@ -47,4 +47,10 @@ private:
 
 	// Damage to deliver
 	int32 Damage;
+
+	// Splash damage
+	int32 SplashDamage;
+
+	// Splash radius
+	float SplashRadius;
 };

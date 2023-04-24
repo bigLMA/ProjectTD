@@ -88,9 +88,10 @@ void ATurret::Upgrade(EUpgradeType UpgradeType)
 	int32 Index;
 
 	// Check upgrade possibility
-	if (!CheckForUpgrade(UpgradeType, Index, 1)) { return; }
-	if (!IsValid(Upgrades[Index].Value)) { return; }
-	if (Upgrades[Index].CurrentLevel < Upgrades[Index].MaxLevel) { return; }
+	if (!CheckForUpgrade(UpgradeType, Index, 1)||
+		!IsValid(Upgrades[Index].Value)|| 
+		!(Upgrades[Index].CurrentLevel < Upgrades[Index].MaxLevel))
+	{ return; }
 
 	// Apply upgrades
 	switch (UpgradeType)
@@ -179,5 +180,8 @@ void ATurret::Fire(const AActor* Target)
 // Sets projectile variables, activates movement
 void ATurret::PrepareProjectile(ATurretProjectile* Projectile, const AActor* Target)
 {
-	Projectile->ActivateProjectile(Target, Damage, DamageToEnemies, DamageToShields);
+	int32 Index;
+	int32 SplashDamage = (CheckForUpgrade(EUpgradeType::Splash, Index)) ? static_cast<int32>(Damage * SplashDamageModifier): -1;
+
+	Projectile->ActivateProjectile(Target, Damage, DamageToEnemies, DamageToShields, SplashDamage);
 }
