@@ -47,6 +47,8 @@ public:
 	// Regenerates health
 	void Regenerate(int32 HealthToAdd);
 
+	float GetHealthPercentage() const;
+
 	FVector GetMeshLocation() const;
 
 	int32 GetDamage()const;
@@ -110,8 +112,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 	class USphereComponent* Collision;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	class UFloatingPawnMovement* FloatingPawnComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health")
+	class UWidgetComponent* HealthComponent;
 
 private:
 	// Called when enemy takes damage over time from burning

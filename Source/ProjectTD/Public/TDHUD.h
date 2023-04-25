@@ -21,10 +21,11 @@ public:
 	// Called when player earns/spends money
 	void DisplayMoney(int32 Money);
 
+protected:
 	// Progress bar to display health
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* HealthBar;
 
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* MoneyBlock;
 };

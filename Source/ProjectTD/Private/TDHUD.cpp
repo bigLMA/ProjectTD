@@ -19,6 +19,6 @@ void UTDHUD::DisplayMoney(int32 Money)
 {
 	if (MoneyBlock)
 	{
-		MoneyBlock->SetText(FText::FromString(FString::FromInt(Money)));
+		MoneyBlock->SetText(FText::AsNumber(Money));
 	}
 }

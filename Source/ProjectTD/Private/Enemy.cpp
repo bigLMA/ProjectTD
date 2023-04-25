@@ -8,6 +8,8 @@
 #include "Path.h"
 #include "AIController.h"
 #include "CameraPlayer.h"
+#include "Components/WidgetComponent.h"
+#include "EnemyHealthWidget.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -28,6 +30,9 @@ AEnemy::AEnemy()
 
 	FloatingPawnComponent = CreateDefaultSubobject<UFloatingPawnMovement>("Pawn Movement");
 	FloatingPawnComponent->MaxSpeed = 300;
+
+	HealthComponent = CreateDefaultSubobject<UWidgetComponent>("Health Component");
+	HealthComponent->SetupAttachment(Mesh);
 }
 
 // Called when the game starts or when spawned
@@ -37,6 +42,11 @@ void AEnemy::BeginPlay()
 	
 	WalkToNextTarget();
 	InitializeEnemy();
+
+	if (auto HealthWidget = Cast<UEnemyHealthWidget>(HealthComponent->GetUserWidgetObject()))
+	{
+		HealthWidget->SetOwner(this);
+	}
 }
 
 // Called to bind functionality to input
@@ -176,6 +186,11 @@ void AEnemy::Regenerate(int32 HealthToAdd)
 {
 	Health += HealthToAdd;
 	Health = FMath::Clamp(Health, 0, MaxHealth);
+}
+
+float AEnemy::GetHealthPercentage() const
+{
+	return static_cast<float>(Health)/ static_cast<float>(MaxHealth);
 }
 
 FVector AEnemy::GetMeshLocation() const
