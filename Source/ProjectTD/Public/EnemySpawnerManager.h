@@ -37,6 +37,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Wave spawning")
 	void SetTimerToSpawnNextWave(int32 DelayTime);
 
+	UFUNCTION(BlueprintCallable, Category = "Wave spawning")
+	int32 GetCurrentWave() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Wave spawning")
+	int32 GetCurrentEnemy() const;
+
 protected:
 	// Spawning properties
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning")

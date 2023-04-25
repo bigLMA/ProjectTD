@@ -58,6 +58,16 @@ void AEnemySpawnerManager::SetTimerToSpawnNextWave(int32 DelayTime)
 		&AEnemySpawnerManager::SetCountdownToSpanwWave,	1, true);
 }
 
+int32 AEnemySpawnerManager::GetCurrentWave() const
+{
+	return CurrentWave;
+}
+
+int32 AEnemySpawnerManager::GetCurrentEnemy() const
+{
+	return CurrentEnemy;
+}
+
 // Spawns next enemy in queue
 void AEnemySpawnerManager::SpawnEnemy()
 {
