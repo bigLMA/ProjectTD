@@ -83,6 +83,7 @@ void AEnemy::ApplyBurning(int32 BurningDamage, float BurningDuration, float Burn
 	else
 	{
 		// Apply effect
+		Effects.Add(EEffects::Burning);
 		GetWorld()->GetTimerManager().SetTimer(BurningTimerHandle, 
 			this, &AEnemy::OnBurningDamageTimerFinished, BurningDuration, false);
 		GetWorld()->GetTimerManager().SetTimer(BurningDamageTimerHandle, [this, BurningDamage]()
@@ -95,7 +96,7 @@ void AEnemy::ApplyBurning(int32 BurningDamage, float BurningDuration, float Burn
 // Called when bunribg efferct finishes
 void AEnemy::OnBurningDamageTimerFinished()
 {
-	Effects.RemoveSingle(EEffects::Burning);
+	Effects.Remove(EEffects::Burning);
 	GetWorld()->GetTimerManager().ClearTimer(BurningTimerHandle);
 	GetWorld()->GetTimerManager().ClearTimer(BurningDamageTimerHandle);
 }
@@ -108,12 +109,12 @@ void AEnemy::ApplyArmourBreak(int32 ArmourDamage, float BreakDuration)
 	if (CheckForImmunity(EEffects::Armour_Break, Index)) { return; }
 
 	// Ñheck if enemy already has effect applied
-	if (CheckForImmunity(EEffects::Armour_Break, Index))
+	if (CheckForEffect(EEffects::Armour_Break, Index))
 	{
 		// Renew effect
 		GetWorld()->GetTimerManager().ClearTimer(ArmourBreakTimerHandle);
 		GetWorld()->GetTimerManager().SetTimer(ArmourBreakTimerHandle,
-			this, &AEnemy::RemoveSlow, BreakDuration, false);
+			this, &AEnemy::RemoveArmourBreak, BreakDuration, false);
 	}
 	else
 	{
@@ -131,6 +132,12 @@ void AEnemy::ApplyArmourBreak(int32 ArmourDamage, float BreakDuration)
 void AEnemy::TakeDamageFromBurning(int32 BurningDamage)
 {
 	ReceiveDamage(BurningDamage);
+
+	int32 Index;
+	if (!CheckForEffect(EEffects::Burning, Index))
+	{
+		OnBurningDamageTimerFinished();
+	}
 }
 
 // Apply slow on Enemy
@@ -198,6 +205,11 @@ void AEnemy::RemoveArmourBreak()
 // Plays when enemy die
 void AEnemy::Die()
 {
+	// Remove timers
+	OnBurningDamageTimerFinished();
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+
+	// Destroy pawn
 	RewardPlayer();
 	Destroy();
 }

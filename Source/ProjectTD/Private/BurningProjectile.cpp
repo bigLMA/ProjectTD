@@ -15,6 +15,8 @@ void ABurningProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherA
 {
 	if (auto Enemy = Cast<AEnemy>(OtherActor))
 	{
+		if (!IsValid(Enemy)) { return; }
+
 		// Apply burning on enemy
 		Enemy->ApplyBurning(BurningDamage, BurningDuration, BurningInterval);
 	}

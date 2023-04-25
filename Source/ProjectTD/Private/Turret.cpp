@@ -18,6 +18,7 @@ ATurret::ATurret()
 	DamageToEnemies(1),
 	DamageToShields(1), 
 	SplashDamageModifier(0.2f),
+	FireRange(500.f),
 	MultitargetDamageModifier(0.1f),
 	MultitargetRadius(400.f)
 {
@@ -133,6 +134,12 @@ int32 ATurret::GetCost() const
 // Locks on target
 void ATurret::LockOn(const AActor* Target, float Time)
 {
+	if (!IsValid(Target) || GetDistanceTo(Target)>FireRange)
+	{
+		OnTargetLost.Broadcast(GetActorLocation());
+		return;
+	}
+
 	// Calculate new rotation for tower
 	auto Rot = UKismetMathLibrary::FindLookAtRotation(Tower->GetComponentLocation(), Target->GetActorLocation());
 	auto NewRot = FMath::RInterpTo(Tower->GetComponentRotation(), Rot, Time, RotationSpeed);

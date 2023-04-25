@@ -125,6 +125,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Turret rotation")
 	float RotationSpeed;
 
+	// Turret fire range
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Fire range")
+	float FireRange;
+
 	// Components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Base")
 	USceneComponent* Root;

@@ -24,8 +24,15 @@ void AEnemySpawnerManager::BeginPlay()
 // Begin spawn next wave
 void AEnemySpawnerManager::BeginSpawnWave()
 {
-	++CurrentWave;
 	CurrentEnemy = 0;
+	++CurrentWave;
+
+	if (CurrentWave >= SpawnWaves.Num())
+	{
+		// Release old timers...
+		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+		return;
+	}
 
 	// Release old timers...
 	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
@@ -33,7 +40,6 @@ void AEnemySpawnerManager::BeginSpawnWave()
 	// Check if all waves are spawned
 	if (!SpawnWaves.IsValidIndex(CurrentWave))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("VSE"))
 		return;
 	}
 
@@ -56,7 +62,9 @@ void AEnemySpawnerManager::SetTimerToSpawnNextWave(int32 DelayTime)
 void AEnemySpawnerManager::SpawnEnemy()
 {
 	// Check if spawned all enemies in wave
-	if (!SpawnWaves[CurrentWave].EnemyClasses.IsValidIndex(CurrentEnemy) || !SpawnWaves.IsValidIndex(CurrentWave))
+	if (!SpawnWaves.IsValidIndex(CurrentWave)||
+		CurrentEnemy >= SpawnWaves[CurrentWave].EnemyClasses.Num() ||
+		!SpawnWaves[CurrentWave].EnemyClasses.IsValidIndex(CurrentEnemy))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(InWaveTimerHandle);
 		return;
