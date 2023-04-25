@@ -9,12 +9,14 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class PROJECTTD_API UTDHUD : public UUserWidget
 {
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION()
-	void DisplayBaseHealth();
+	void DisplayBaseHealth(float Percentage);
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UProgressBar* HealthBar;
 };

@@ -7,6 +7,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "TDHUD.h"
+#include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACameraPlayer::ACameraPlayer()
@@ -45,6 +48,15 @@ void ACameraPlayer::BeginPlay()
 	FTimerHandle IncomeTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(IncomeTimerHandle,
 		this, &ACameraPlayer::AddIncome, 1.f, true);
+
+	// Create widget
+	if (HUDClass)
+	{
+		PlayerHUD = CreateWidget<UTDHUD>(UGameplayStatics::GetPlayerController
+		(GetWorld(), 0), HUDClass);
+		PlayerHUD->AddToViewport();
+		PlayerHUD->DisplayBaseHealth(1.f);
+	}
 }
 
 // Called to bind functionality to input
@@ -115,4 +127,9 @@ void ACameraPlayer::AddBounty(int32 Bounty)
 void ACameraPlayer::RemovePlayerMoney(int32 MoneyToRemove)
 {
 	Money -= MoneyToRemove;
+}
+
+void ACameraPlayer::UpdateBaseHealth(float Percentage)
+{
+	PlayerHUD->DisplayBaseHealth(Percentage);
 }

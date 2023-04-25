@@ -2,7 +2,12 @@
 
 
 #include "TDHUD.h"
+#include "Components/ProgressBar.h"
 
-void UTDHUD::DisplayBaseHealth()
+void UTDHUD::DisplayBaseHealth(float Percentage)
 {
+	if (HealthBar)
+	{
+		HealthBar->SetPercent(Percentage);
+	}
 }

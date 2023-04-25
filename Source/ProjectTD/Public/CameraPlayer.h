@@ -23,6 +23,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Money")
 	void RemovePlayerMoney(int32 MoneyToRemove);
 
+	void UpdateBaseHealth(float Percentage);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -78,6 +80,14 @@ protected:
 	// Player income (per second)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Money", meta = (ClampMin = 0, UIMin = 0))
 	int32 Income;
+
+	// HUD class
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<class UTDHUD> HUDClass;
+
+	// HUD instance
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	UTDHUD* PlayerHUD;
 
 private:
 	// Input functions

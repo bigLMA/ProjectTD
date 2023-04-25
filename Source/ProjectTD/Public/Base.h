@@ -15,13 +15,24 @@ public:
 	// Sets default values for this actor's properties
 	ABase();
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthPercentage() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	// Health of the base
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health", meta = (ClampMin=1, UIMin=1))
+	UPROPERTY(BlueprintReadOnly, Category = "Health", meta = (ClampMin=1, UIMin=1))
 	int32 Health;
+
+	// MaxHealth of the base
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Health", meta = (ClampMin = 1, UIMin = 1))
+	int32 MaxHealth;
+
+	// Player
+	UPROPERTY(BlueprintReadOnly, Category = "Player")
+	class ACameraPlayer* PlayerPawn;
 
 	// Components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Root")
