@@ -22,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Errect turret")
 	void ErrectTurret(TSubclassOf<class ATurret> TurretClass);
 
+	UFUNCTION(BlueprintCallable, Category = "Placed status")
+	bool GetIsPlaced() const { return bIsPlaced; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
