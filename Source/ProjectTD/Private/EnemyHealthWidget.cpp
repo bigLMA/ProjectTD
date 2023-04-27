@@ -12,6 +12,8 @@ void UEnemyHealthWidget::SetOwner(AEnemy* InEnemy)
 
 void UEnemyHealthWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
 	if (Owner)
 	{
 		HealthBar->SetPercent(Owner->GetHealthPercentage());

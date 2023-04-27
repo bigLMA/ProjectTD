@@ -21,6 +21,9 @@ public:
 	// Called when player earns/spends money
 	void DisplayMoney(int32 Money);
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Building menu")
+	void BuildingMenuPull(bool bPullStatus);
+
 protected:
 	// Progress bar to display health
 	UPROPERTY(meta = (BindWidget))
@@ -28,4 +31,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* MoneyBlock;
+
+	UPROPERTY(meta = (BindWidget))
+	class UBuildingMenu* BuildingMenu;
+
+	virtual void NativePreConstruct() override;
 };

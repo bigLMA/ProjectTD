@@ -8,6 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTargetLostDelegate, const FVector& , Location)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultitargetShootingDelegate, float, Radius)
+
 UENUM()
 enum class EUpgradeType : uint8
 {
@@ -18,6 +19,9 @@ USTRUCT(BlueprintType)
 struct FUpgrades
 {
 	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade icon")
+	UTexture2D* Icon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade type")
 	EUpgradeType UpgradeType;
