@@ -56,6 +56,7 @@ void ATurretPlacingActor::ErrectTurret(TSubclassOf<class ATurret> TurretClass)
 	if (auto Player = Cast<ACameraPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
 	{
 		Player->RemovePlayerMoney(Turret->GetCost());
+		Player->ToggleConstructionVisibility(false);
 	}
 }
 

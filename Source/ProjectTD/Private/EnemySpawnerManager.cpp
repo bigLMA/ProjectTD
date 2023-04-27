@@ -24,15 +24,15 @@ void AEnemySpawnerManager::BeginPlay()
 // Begin spawn next wave
 void AEnemySpawnerManager::BeginSpawnWave()
 {
-	CurrentEnemy = 0;
-	++CurrentWave;
-
-	if (CurrentWave >= SpawnWaves.Num())
+	if (CurrentWave+1 >= SpawnWaves.Num())
 	{
 		// Release old timers...
 		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 		return;
 	}
+
+	CurrentEnemy = 0;
+	++CurrentWave;
 
 	// Release old timers...
 	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);

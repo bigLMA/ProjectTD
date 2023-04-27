@@ -28,7 +28,10 @@ ATurretPrevievActor::ATurretPrevievActor()
 void ATurretPrevievActor::BeginPlay()
 {
 	Super::BeginPlay();
+	// set Object for tracing turret placing actor
 	Object.Add(EObjectTypeQuery::ObjectTypeQuery8);
+
+	// set Ground for tracing ground objects
 	Ground.Add(EObjectTypeQuery::ObjectTypeQuery9);
 }
 
@@ -52,6 +55,7 @@ void ATurretPrevievActor::SetPrevievLocation()
 		{
 			if (!PlacingActor->GetIsPlaced())
 			{
+				// Inform player of building allowance and location
 				SetActorLocation(PlacingActor->GetActorLocation());
 				SetActorMaterial(true);
 			}
@@ -59,6 +63,7 @@ void ATurretPrevievActor::SetPrevievLocation()
 	}
 	else if (GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursorForObjects(Ground, false, Hit))
 	{
+		// Just show actor and unavailable building status 
 		SetActorLocation(Hit.Location);
 		SetActorMaterial(false);
 	}

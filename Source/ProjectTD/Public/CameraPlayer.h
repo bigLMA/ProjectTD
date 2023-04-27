@@ -23,7 +23,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Money")
 	void RemovePlayerMoney(int32 MoneyToRemove);
 
+	// Widget progress bar function
 	void UpdateBaseHealth(float Percentage);
+
+	// Set all placing actors to toggle visibility
+	void ToggleConstructionVisibility(bool bIsVisble);
+
+	int32 GetMoney() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -98,4 +104,10 @@ private:
 
 	// Income
 	void AddIncome();
+
+	// Preview actor
+	class ATurretPrevievActor* PreviewActor;
+
+public:
+	void SetPreviewActor(ATurretPrevievActor* Actor);
 };

@@ -10,6 +10,8 @@
 #include "TDHUD.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "TurretPrevievActor.h"
+#include "TurretPlacingActor.h"
 
 // Sets default values
 ACameraPlayer::ACameraPlayer()
@@ -90,8 +92,6 @@ void ACameraPlayer::Zoom(const FInputActionValue& Value)
 {
 	auto ZoomValue = Value.Get<float>();
 	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength + ZoomValue * ZoomSpeed, ZoomMin, ZoomMax);
-	/*SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength, ZoomMin, ZoomMax);
-	SpringArm->TargetArmLength += ZoomValue * ZoomSpeed;*/
 }
 
 // Rotates pawn
@@ -99,7 +99,6 @@ void ACameraPlayer::Rotate(const FInputActionValue& Value)
 {
 	auto RotateValue = Value.Get<float>();
 	SetActorRotation(GetActorRotation() + FRotator(0.f, RotateValue, 0.f));
-	//SetActorRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw + RotateValue, GetActorRotation().Roll));
 }
 
 // Select interactable actor
@@ -108,7 +107,18 @@ void ACameraPlayer::Select(const FInputActionValue& Value)
 	auto Selection = Value.Get<bool>();//TODO selection
 	if (Selection)
 	{
+		if (PreviewActor)
+		{
+			TArray<TEnumAsByte<EObjectTypeQuery>> Object;
+			Object.Add(EObjectTypeQuery::ObjectTypeQuery8);
+			FHitResult Hit;
 
+			if (GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursorForObjects(Object, false, Hit))
+			{
+				PreviewActor->ConstructTurret();
+				PreviewActor = nullptr;
+			}
+		}
 	}
 }
 
@@ -135,4 +145,28 @@ void ACameraPlayer::RemovePlayerMoney(int32 MoneyToRemove)
 void ACameraPlayer::UpdateBaseHealth(float Percentage)
 {
 	PlayerHUD->DisplayBaseHealth(Percentage);
+}
+
+void ACameraPlayer::ToggleConstructionVisibility(bool bIsVisble)
+{
+	TArray<AActor*> TurretPlacingActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATurretPlacingActor::StaticClass(), TurretPlacingActors);
+
+	for (auto Actor : TurretPlacingActors)
+	{
+		if (auto Placing = Cast<ATurretPlacingActor>(Actor))
+		{
+			Placing->ToggleActorVisibility(bIsVisble);
+		}
+	}
+}
+
+int32 ACameraPlayer::GetMoney() const
+{
+	return Money;
+}
+
+void ACameraPlayer::SetPreviewActor(ATurretPrevievActor* Actor)
+{
+	PreviewActor = Actor;
 }

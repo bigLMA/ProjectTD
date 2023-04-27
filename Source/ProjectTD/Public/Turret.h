@@ -67,6 +67,8 @@ public:
 
 	int32 GetCost() const;
 
+	UTexture2D* GetThumbnail() const;
+
 	// Delegate, called when target is lost
 	FTargetLostDelegate OnTargetLost;
 

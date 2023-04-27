@@ -131,6 +131,11 @@ int32 ATurret::GetCost() const
 	return Cost;
 }
 
+UTexture2D* ATurret::GetThumbnail() const
+{
+	return Thumbnail;
+}
+
 // Locks on target
 void ATurret::LockOn(const AActor* Target, float Time)
 {
