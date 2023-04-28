@@ -43,4 +43,6 @@ private:
 
 	UFUNCTION()
 	void OnButtonPushed();
+
+	//TODO info widget
 };

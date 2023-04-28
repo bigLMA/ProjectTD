@@ -77,6 +77,7 @@ void ACameraPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		// Clicking
 		EnhancedInput->BindAction(SelectUnit, ETriggerEvent::Triggered, this, &ACameraPlayer::Select);
+		EnhancedInput->BindAction(CancelAction, ETriggerEvent::Triggered, this, &ACameraPlayer::Cancel);
 	}
 }
 
@@ -105,7 +106,7 @@ void ACameraPlayer::Rotate(const FInputActionValue& Value)
 // Select interactable actor
 void ACameraPlayer::Select(const FInputActionValue& Value)
 {
-	auto Selection = Value.Get<bool>();//TODO selection
+	auto Selection = Value.Get<bool>();
 	if (Selection)
 	{
 		if (PreviewActor)
@@ -132,6 +133,25 @@ void ACameraPlayer::Select(const FInputActionValue& Value)
 		if (auto Turret = Cast<ATurret>(Hit.GetActor()))
 		{
 			PlayerHUD->ToggleTurretInfo(true, Turret);
+		}
+		else
+		{
+			PlayerHUD->ToggleTurretInfo(false, nullptr);
+		}
+	}
+}
+
+void ACameraPlayer::Cancel(const FInputActionValue& Value)
+{
+	auto Canceling = Value.Get<bool>();
+	if (Canceling)
+	{
+		if (PreviewActor)
+		{
+			PreviewActor->Destroy();
+			PreviewActor = nullptr;
+			ToggleConstructionVisibility(false);
+			return;
 		}
 		else
 		{

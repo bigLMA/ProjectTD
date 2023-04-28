@@ -67,6 +67,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Select")
 	UInputAction* SelectUnit;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Cancel")
+	UInputAction* CancelAction;
+
 	// Minimal spring arm length
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input|Zoom")
 	float ZoomMin;
@@ -101,6 +104,7 @@ private:
 	void Zoom(const FInputActionValue& Value);
 	void Rotate(const FInputActionValue& Value);
 	void Select(const FInputActionValue& Value);
+	void Cancel(const FInputActionValue& Value);
 
 	// Income
 	void AddIncome();
