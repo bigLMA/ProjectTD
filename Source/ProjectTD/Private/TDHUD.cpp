@@ -5,6 +5,7 @@
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "BuildingMenu.h"
+#include "TurretPanel.h"
 
 // Called when base is attacked
 void UTDHUD::DisplayBaseHealth(float Percentage)
@@ -22,6 +23,20 @@ void UTDHUD::DisplayMoney(int32 Money)
 	{
 		MoneyBlock->SetText(FText::AsNumber(Money));
 	}
+}
+
+void UTDHUD::ToggleTurretInfo(bool bVisible, ATurret* InTurret)
+{
+	if (!bVisible)
+	{
+		TurretPanel->SetVisibility(ESlateVisibility::Collapsed);
+		return;
+	}
+
+	if (!TurretPanel) { return; }
+
+	TurretPanel->SetVisibility(ESlateVisibility::Visible);
+	TurretPanel->DispalyPanel(InTurret);
 }
 
 void UTDHUD::NativePreConstruct()

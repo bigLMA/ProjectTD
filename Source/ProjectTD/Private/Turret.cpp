@@ -136,6 +136,26 @@ UTexture2D* ATurret::GetThumbnail() const
 	return Thumbnail;
 }
 
+int32 ATurret::GetUpgradesLength() const
+{
+	return Upgrades.Num();
+}
+
+const FUpgrades& ATurret::GetUpgradeAtIndex(int32 Index) const
+{
+	return Upgrades[Index];
+}
+
+const FText& ATurret::GetTurretName() const
+{
+	return TurretName;
+}
+
+const FText& ATurret::GetTurretDescription() const
+{
+	return TurretDescription;
+}
+
 // Locks on target
 void ATurret::LockOn(const AActor* Target, float Time)
 {

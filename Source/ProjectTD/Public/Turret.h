@@ -23,6 +23,9 @@ struct FUpgrades
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade icon")
 	UTexture2D* Icon;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Description")
+	FText Description;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Upgrade type")
 	EUpgradeType UpgradeType;
 
@@ -65,9 +68,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Upgrades")
 	virtual void Upgrade(EUpgradeType UpgradeType);
 
+	// Getters to pass turret info
 	int32 GetCost() const;
-
 	UTexture2D* GetThumbnail() const;
+	int32 GetUpgradesLength() const;
+	const FUpgrades& GetUpgradeAtIndex(int32 Index) const;
+	const FText& GetTurretName() const;
+	const FText& GetTurretDescription() const;
 
 	// Delegate, called when target is lost
 	FTargetLostDelegate OnTargetLost;

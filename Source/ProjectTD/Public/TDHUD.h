@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "TDHUD.generated.h"
 
+class ATurret;
+
 /**
  * 
  */
@@ -24,6 +26,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Building menu")
 	void BuildingMenuPull(bool bPullStatus);
 
+	void ToggleTurretInfo(bool bVisible, ATurret* InTurret);
+
 protected:
 	// Progress bar to display health
 	UPROPERTY(meta = (BindWidget))
@@ -34,6 +38,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	class UBuildingMenu* BuildingMenu;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTurretPanel* TurretPanel;
 
 	virtual void NativePreConstruct() override;
 };

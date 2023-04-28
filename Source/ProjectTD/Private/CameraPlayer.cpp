@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "TurretPrevievActor.h"
 #include "TurretPlacingActor.h"
+#include "Turret.h"
 
 // Sets default values
 ACameraPlayer::ACameraPlayer()
@@ -117,7 +118,24 @@ void ACameraPlayer::Select(const FInputActionValue& Value)
 			{
 				PreviewActor->ConstructTurret();
 				PreviewActor = nullptr;
+				return;
 			}
+		}
+	}
+
+	FHitResult Hit;
+
+	if (Selection && GetWorld()->GetFirstPlayerController()->
+		GetHitResultUnderCursorByChannel(
+			TraceTypeQuery1, false, Hit))
+	{
+		if (auto Turret = Cast<ATurret>(Hit.GetActor()))
+		{
+			PlayerHUD->ToggleTurretInfo(true, Turret);
+		}
+		else
+		{
+			PlayerHUD->ToggleTurretInfo(false, nullptr);
 		}
 	}
 }

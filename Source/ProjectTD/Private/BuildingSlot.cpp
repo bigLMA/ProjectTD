@@ -37,6 +37,13 @@ FReply UBuildingSlot::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry
 	if (auto Player = Cast<ACameraPlayer>(
 		UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
 	{
+
+		// Check if there is already preview actor
+		TArray<AActor*> PreviewActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATurretPrevievActor::StaticClass(), PreviewActors);
+		
+		if(PreviewActors.Num()>0) { return FReply::Handled(); }
+
 		if (Player->GetMoney() > Cost)
 		{
 			// Create turret preview actor
@@ -51,6 +58,6 @@ FReply UBuildingSlot::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry
 			}
 		}
 	}
-	
+
 	return FReply::Handled();
 }
