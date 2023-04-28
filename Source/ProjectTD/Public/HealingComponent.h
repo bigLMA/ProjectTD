@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class PROJECTTD_API UHealingComponent : public USphereComponent
 {
 	GENERATED_BODY()
