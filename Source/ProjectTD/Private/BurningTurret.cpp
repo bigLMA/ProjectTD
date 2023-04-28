@@ -20,7 +20,7 @@ void ABurningTurret::Upgrade(EUpgradeType UpgradeType)
 	switch (UpgradeType)
 	{
 	case EUpgradeType::BurningDamage:
-		BurningDamage+= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		BurningDamage= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	default:
 		break;

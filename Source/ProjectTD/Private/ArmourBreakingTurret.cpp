@@ -20,7 +20,7 @@ void AArmourBreakingTurret::Upgrade(EUpgradeType UpgradeType)
 	switch (UpgradeType)
 	{
 	case EUpgradeType::ArmourPenetrarion:
-		ArmourBreakStrength += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		ArmourBreakStrength = Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	default:
 		break;

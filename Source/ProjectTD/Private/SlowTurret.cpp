@@ -20,7 +20,7 @@ void ASlowTurret::Upgrade(EUpgradeType UpgradeType)
 	switch (UpgradeType)
 	{
 	case EUpgradeType::Slow:
-		SlowStrength += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		SlowStrength = Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	default:
 		break;

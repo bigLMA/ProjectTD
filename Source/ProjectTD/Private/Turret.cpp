@@ -99,22 +99,22 @@ void ATurret::Upgrade(EUpgradeType UpgradeType)
 	switch (UpgradeType)
 	{
 	case EUpgradeType::Damage:
-		Damage += static_cast<int32>(Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel));
+		Damage = static_cast<int32>(Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel));
 		break;
 	case EUpgradeType::DamageToEnemies:
-		DamageToEnemies += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		DamageToEnemies = Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::DamageToShields:
-		DamageToShields+= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		DamageToShields = Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::ReloadTime:
-		ReloadTime-= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		ReloadTime= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::Splash:
-		SplashDamageModifier+= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		SplashDamageModifier = Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	case EUpgradeType::Multitarget:
-		MultitargetDamageModifier += Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
+		MultitargetDamageModifier = Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
 		break;
 	default:
 		break;
