@@ -61,8 +61,11 @@ void AEnemy::ReceiveDamage(int32 Damage)
 {
 	// Check damage against armour, 
 	// leave function if damage dealt would be less than 1
-	int32 DamageDealt = Damage - Armour;
-	if (DamageDealt <= 0) { return; }
+	float DamageDealt = static_cast<float>(Damage) *(1 - static_cast<float>(Armour/100));
+	if (DamageDealt < 0) 
+	{ 
+		DamageDealt = -DamageDealt;
+	}
 
 	Health -= DamageDealt;
 

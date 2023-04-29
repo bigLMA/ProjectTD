@@ -39,8 +39,6 @@ protected:
 	UFUNCTION()
 	virtual void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-private:
-
 	// Damage multipliers for different target types
 	float DamageToEnemies;
 	float DamageToShields;
@@ -48,6 +46,7 @@ private:
 	// Damage to deliver
 	int32 Damage;
 
+private:
 	// Splash damage
 	int32 SplashDamage;
 

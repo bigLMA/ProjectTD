@@ -9,14 +9,6 @@ UHealingComponent::UHealingComponent()
 {
 }
 
-// Called when the game starts or when spawned
-void UHealingComponent::BeginPlay()
-{
-	FTimerHandle RegenerationTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(RegenerationTimerHandle, 
-		this, &UHealingComponent::Regenerate, RegenInterval, true);
-}
-
 void UHealingComponent::Regenerate()
 {
 	TArray<AActor*> OverlappingActors;
