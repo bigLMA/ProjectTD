@@ -31,10 +31,10 @@ void ABurningTurret::PrepareProjectile(ATurretProjectile* Projectile, const AAct
 {
 	Super::PrepareProjectile(Projectile, Target);
 
-	// Check if projectile is slow projectile
-	if (auto SlowProjectile = Cast<ABurningProjectile>(Projectile))
+	// Check if projectile is burning projectile
+	if (auto BurningProjectile = Cast<ABurningProjectile>(Projectile))
 	{
-		// Pass slow properties to projectile
-		SlowProjectile->SetBurningProperties(BurningDamage, BurningDuration, BurningInterval);
+		// Pass burning properties to projectile
+		BurningProjectile->SetBurningProperties(BurningDamage, BurningDuration, BurningInterval);
 	}
 }

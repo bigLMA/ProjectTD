@@ -13,7 +13,13 @@
 
 // Sets default values
 AEnemy::AEnemy()
-: Bounty(10), BountyBase(10), BountyDispersion(0), MaxHealth(50), InitialArmour(10), DistanceThreshold(130), DamageToBase(7)
+: Bounty(10), BountyBase(10), 
+BountyDispersion(0), 
+MaxHealth(50), 
+InitialArmour(10), 
+DistanceThreshold(130),
+DamageToBase(7),
+IncreasedBounty(0)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -184,6 +190,29 @@ void AEnemy::ApplySlow(float SlowStrength, float SlowDuration)
 	}
 }
 
+void AEnemy::ApplyIncreasedMoney(int32 NewBounty, float Duration)
+{
+	int Index = -1;
+
+	if (CheckForEffect(EEffects::Increased_Bounty, Index))
+	{
+		// Renew bounty
+		GetWorld()->GetTimerManager().ClearTimer(IncreasedBountyTimerHandle);
+		GetWorld()->GetTimerManager().SetTimer(IncreasedBountyTimerHandle,
+			this, &AEnemy::RemoveIncreasedBounty, Duration, false);
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().SetTimer(IncreasedBountyTimerHandle,
+			this, &AEnemy::RemoveIncreasedBounty, Duration, false);
+
+		Effects.Add(EEffects::Increased_Bounty);
+		IncreasedBounty = NewBounty;
+	}
+
+}
+	
+
 // Regenerates health
 void AEnemy::Regenerate(int32 HealthToAdd)
 {
@@ -220,6 +249,11 @@ void AEnemy::RemoveArmourBreak()
 	Armour = InitialArmour;
 }
 
+void AEnemy::RemoveIncreasedBounty()
+{
+	IncreasedBounty = 0;
+}
+
 // Plays when enemy die
 void AEnemy::Die()
 {
@@ -240,7 +274,7 @@ void AEnemy::RewardPlayer()
 
 	if ( auto Player = Cast<ACameraPlayer>(CameraPlayers[0]))
 	{
-		Player->AddBounty(Bounty);
+		Player->AddBounty(Bounty + IncreasedBounty);
 	}
 }
 

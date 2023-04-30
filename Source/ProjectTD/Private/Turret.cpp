@@ -17,7 +17,7 @@ ATurret::ATurret()
 	Damage(15),
 	DamageToEnemies(1),
 	DamageToShields(1), 
-	SplashDamageModifier(0.2f),
+	SplashDamageModifier(0.3f),
 	FireRange(500.f),
 	MultitargetDamageModifier(0.1f),
 	MultitargetRadius(400.f)

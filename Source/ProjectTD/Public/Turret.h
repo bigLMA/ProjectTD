@@ -12,7 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultitargetShootingDelegate, float,
 UENUM()
 enum class EUpgradeType : uint8
 {
-	Damage, DamageToEnemies, DamageToShields, Slow, BurningDamage, ReloadTime, Splash, Multitarget, ArmourPenetrarion
+	Damage, DamageToEnemies, DamageToShields, Slow, BurningDamage, ReloadTime, Splash, Multitarget, ArmourPenetrarion, Bounty_Increasment
 };
 
 USTRUCT(BlueprintType)

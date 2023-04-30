@@ -9,7 +9,7 @@
 UENUM()
 enum class EEffects :uint8
 {
-	Slow, Burning, Armour_Break
+	Slow, Burning, Armour_Break, Increased_Bounty
 };
 
 UCLASS()
@@ -43,6 +43,10 @@ public:
 	// Apply slow on Enemy
 	UFUNCTION(BlueprintCallable, Category = "Slow")
 	void ApplySlow(float SlowStrength, float SlowDuration);
+
+	// Apply increased bounty on Enemy
+	UFUNCTION(BlueprintCallable, Category = "Increased bounty")
+	void ApplyIncreasedMoney(int32 NewBounty, float Duration);
 
 	// Regenerates health
 	void Regenerate(int32 HealthToAdd);
@@ -140,6 +144,9 @@ private:
 	// Removes armour break
 	void RemoveArmourBreak();
 
+	// Removes increased bounty
+	void RemoveIncreasedBounty();
+
 	// Plays when enemy die
 	void Die();
 
@@ -156,6 +163,9 @@ private:
 	// Checks for immunity
 	bool CheckForImmunity(EEffects Effect, int32& Index);
 
+	// Increased bounty
+	int32 IncreasedBounty;
+
 	// Timer handle for checking proximity to target
 	FTimerHandle TimerProximityTimerHandle;
 
@@ -170,6 +180,9 @@ private:
 
 	// Timer handle for armour break effect
 	FTimerHandle ArmourBreakTimerHandle;
+
+	// Timer handle for increased bounty
+	FTimerHandle IncreasedBountyTimerHandle;
 
 	// Enemy effects
 	TArray<EEffects>Effects;
