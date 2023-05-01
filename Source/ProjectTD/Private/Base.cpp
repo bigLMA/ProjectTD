@@ -62,7 +62,6 @@ void ABase::OnComponentOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 void ABase::RecieveDamage(int32 Damage)
 {
 	Health -= Damage;
-	UE_LOG(LogTemp, Warning, TEXT("Health %d"), Health);
 
 	if (PlayerPawn)
 	{

@@ -13,11 +13,11 @@ void UHealingComponent::Regenerate()
 {
 	TArray<AActor*> OverlappingActors;
 	GetOverlappingActors(OverlappingActors);
-
 	for (auto Actor : OverlappingActors)
 	{
 		if (auto Enemy = Cast<AEnemy>(Actor))
 		{
+			
 			Enemy->Regenerate(Regeneration);
 		}
 	}

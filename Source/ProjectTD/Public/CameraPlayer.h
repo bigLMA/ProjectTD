@@ -17,6 +17,7 @@ public:
 	ACameraPlayer();
 
 	// Adds bounty to money on killing enemy
+	UFUNCTION(BlueprintCallable, Category = "Money")
 	void AddBounty(int32 Bounty);
 	
 	// Removes player money

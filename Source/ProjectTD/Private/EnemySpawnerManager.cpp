@@ -6,7 +6,7 @@
 
 // Sets default values
 AEnemySpawnerManager::AEnemySpawnerManager()
-	: CurrentWave(-1), CurrentEnemy(0), CurrentSecondsToNextWave(0), SpawnInterval(0.65)
+	:InitialDelay(8), CurrentWave(-1), CurrentEnemy(0), CurrentSecondsToNextWave(0), SpawnInterval(0.65)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -18,7 +18,8 @@ void AEnemySpawnerManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	BeginSpawnWave();
+	SetTimerToSpawnNextWave(InitialDelay);
+	//BeginSpawnWave();
 }
 
 // Begin spawn next wave
@@ -26,7 +27,6 @@ void AEnemySpawnerManager::BeginSpawnWave()
 {
 	if (CurrentWave+1 >= SpawnWaves.Num())
 	{
-		// Release old timers...
 		GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 		return;
 	}
@@ -66,6 +66,11 @@ int32 AEnemySpawnerManager::GetCurrentWave() const
 int32 AEnemySpawnerManager::GetCurrentEnemy() const
 {
 	return CurrentEnemy;
+}
+
+int32 AEnemySpawnerManager::GetSecondsRemaining() const
+{
+	return CurrentSecondsToNextWave;
 }
 
 // Spawns next enemy in queue

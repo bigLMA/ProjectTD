@@ -11,7 +11,7 @@
 
 // Sets default values
 ATurret::ATurret()
-	:RotationSpeed(9.5f), 
+	:RotationSpeed(18.5f), 
 	Cost(10),
 	ReloadTime(0.6f),
 	Damage(15),

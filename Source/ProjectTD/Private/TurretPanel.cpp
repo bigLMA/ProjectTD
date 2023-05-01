@@ -33,7 +33,7 @@ void UTurretPanel::DispalyPanel(ATurret* InTurret)
 		// Create new widget
 		UTurretUpgradeInfo* NewWidget = CreateWidget<UTurretUpgradeInfo>(
 			GetWorld()->GetFirstPlayerController(),	TurretUpgradeClass);
-		UE_LOG(LogTemp, Warning, TEXT("ALEG"))
+
 		// Add widget to vertical box
 		NewWidget->DisplayWidget(InTurret, j);
 		UpgradeBox->AddChildToVerticalBox(NewWidget);

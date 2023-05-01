@@ -164,20 +164,32 @@ void ACameraPlayer::Cancel(const FInputActionValue& Value)
 void ACameraPlayer::AddIncome()
 {
 	Money += Income;
-	PlayerHUD->DisplayMoney(Money);
+
+	if (PlayerHUD)
+	{
+		PlayerHUD->DisplayMoney(Money);
+	}
 }
 
 // Adds bounty to money on killing enemy
 void ACameraPlayer::AddBounty(int32 Bounty)
 {
 	Money += Bounty;
-	PlayerHUD->DisplayMoney(Money);
+
+	if (PlayerHUD)
+	{
+		PlayerHUD->DisplayMoney(Money);
+	}
 }
 
 void ACameraPlayer::RemovePlayerMoney(int32 MoneyToRemove)
 {
-	Money -= MoneyToRemove;
-	PlayerHUD->DisplayMoney(Money);
+	Money -= MoneyToRemove; 
+
+	if (PlayerHUD)
+	{
+		PlayerHUD->DisplayMoney(Money);
+	}
 }
 
 void ACameraPlayer::UpdateBaseHealth(float Percentage)

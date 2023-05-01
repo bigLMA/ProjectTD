@@ -34,6 +34,7 @@ public:
 	void BeginSpawnWave();
 
 	// Set timer to countdown to spawn next wave
+
 	UFUNCTION(BlueprintCallable, Category = "Wave spawning")
 	void SetTimerToSpawnNextWave(int32 DelayTime);
 
@@ -43,7 +44,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Wave spawning")
 	int32 GetCurrentEnemy() const;
 
+	UFUNCTION(BlueprintCallable, Category = "Wave spawning")
+	int32 GetSecondsRemaining() const;
+
 protected:
+	// Delay when game begins to give player time to prepare for enemy waves
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning|Initial delay")
+	int32 InitialDelay;
+
 	// Spawning properties
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning")
 	TArray<FSpawnWave> SpawnWaves;
