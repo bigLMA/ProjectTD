@@ -76,7 +76,7 @@ void ATurretPrevievActor::SetTurretToBuild(TSubclassOf<class ATurret> TurretClas
 
 void ATurretPrevievActor::ConstructTurret()
 {
-	if (!TurretToBuild) { return; }
+	if (!IsValid(TurretToBuild)) { return; }
 
 	FHitResult Hit;
 

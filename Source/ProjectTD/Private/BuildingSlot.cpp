@@ -44,7 +44,7 @@ FReply UBuildingSlot::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry
 		
 		if(PreviewActors.Num()>0) { return FReply::Handled(); }
 
-		if (Player->GetMoney() > Cost)
+		if (Player->GetMoney() >= Cost)
 		{
 			// Create turret preview actor
 			FActorSpawnParameters Params;

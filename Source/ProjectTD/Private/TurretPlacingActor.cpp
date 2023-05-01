@@ -58,5 +58,7 @@ void ATurretPlacingActor::ErrectTurret(TSubclassOf<class ATurret> TurretClass)
 		Player->RemovePlayerMoney(Turret->GetCost());
 		Player->ToggleConstructionVisibility(false);
 	}
+
+	Destroy();
 }
 
