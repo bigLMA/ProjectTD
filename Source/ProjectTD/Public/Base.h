@@ -18,6 +18,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetHealthPercentage() const;
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Game Flow")
+	void PlayerLost();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

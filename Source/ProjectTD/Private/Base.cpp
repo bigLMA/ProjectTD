@@ -77,7 +77,6 @@ void ABase::RecieveDamage(int32 Damage)
 // Called when base is destroyed
 void ABase::BaseDestroyed()
 {
-	//TODO when base is destroyed
-	//Destroy();
+	PlayerLost();
 }
 
