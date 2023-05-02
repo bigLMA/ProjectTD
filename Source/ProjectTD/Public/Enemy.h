@@ -102,6 +102,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mesh")
 	int32 DamageToBase;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effect visuals|Burning")
+	UParticleSystemComponent* Burning;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effect visuals|Slowing")
+	UParticleSystemComponent* Slowing;
+
 	// Immunity to negative effects
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Immunities")
 	TArray<EEffects> Immunities;

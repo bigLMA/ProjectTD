@@ -10,6 +10,8 @@
 #include "CameraPlayer.h"
 #include "Components/WidgetComponent.h"
 #include "EnemyHealthWidget.h"
+#include "Particles/ParticleSystemComponent.h"
+
 
 // Sets default values
 AEnemy::AEnemy()
@@ -39,6 +41,18 @@ IncreasedBounty(0)
 
 	HealthComponent = CreateDefaultSubobject<UWidgetComponent>("Health Component");
 	HealthComponent->SetupAttachment(Mesh);
+
+	Burning = CreateDefaultSubobject< UParticleSystemComponent>("Burning Effect");
+	Burning->SetupAttachment(Mesh);
+	Burning->SetRelativeRotation(FRotator(0, -90, 0));
+
+	Slowing= CreateDefaultSubobject< UParticleSystemComponent>("Slowing Effect");
+	Slowing->SetupAttachment(Mesh);
+	Slowing->SetRelativeRotation(FRotator(0, -90, 0));
+
+	//Set particles not to be active
+	Burning->SetAutoActivate(false);
+	Slowing->SetAutoActivate(false);
 }
 
 // Called when the game starts or when spawned
@@ -109,6 +123,12 @@ void AEnemy::ApplyBurning(int32 BurningDamage, float BurningDuration, float Burn
 		{
 				TakeDamageFromBurning(BurningDamage);
 		}, BurningInterval, true);
+
+		// Activate particle 
+		if(Burning)
+		{
+			Burning->Activate();
+		}
 	}
 }
 
@@ -118,6 +138,12 @@ void AEnemy::OnBurningDamageTimerFinished()
 	Effects.Remove(EEffects::Burning);
 	GetWorld()->GetTimerManager().ClearTimer(BurningTimerHandle);
 	GetWorld()->GetTimerManager().ClearTimer(BurningDamageTimerHandle);
+
+	// Deactivate particle
+	if (Burning)
+	{
+		Burning->Deactivate();
+	}
 }
 
 // Called when enemy armour is broken
@@ -187,6 +213,12 @@ void AEnemy::ApplySlow(float SlowStrength, float SlowDuration)
 		// Set timer to remove slow
 		GetWorld()->GetTimerManager().SetTimer(SlowTimerHandle,
 			this, &AEnemy::RemoveSlow, SlowDuration, false);
+
+		//Activate particle
+		if(Slowing)
+		{
+			Slowing->Activate();
+		}
 	}
 }
 
@@ -240,6 +272,12 @@ void AEnemy::RemoveSlow()
 {
 	Effects.RemoveSingle(EEffects::Slow);
 	FloatingPawnComponent->MaxSpeed = InitialSpeed;
+
+	// Deactivate Particle
+	if(Slowing)
+	{
+		Slowing->Deactivate();
+	}
 }
 
 // Removes armour break
