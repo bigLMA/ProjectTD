@@ -18,7 +18,7 @@ ATurret::ATurret()
 	DamageToEnemies(1),
 	DamageToShields(1), 
 	SplashDamageModifier(0.3f),
-	FireRange(500.f),
+	FireRange(750.f),
 	MultitargetDamageModifier(0.1f),
 	MultitargetRadius(400.f)
 {
@@ -73,7 +73,6 @@ void ATurret::AimAt(const AActor* Target)
 
 	if (IsValid(Target))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *Target->GetName())
 		GetWorld()->GetTimerManager().SetTimer(AimingTimerHandle, [this, Target, Time]()
 		{
 			LockOn(Target, Time);
@@ -82,7 +81,6 @@ void ATurret::AimAt(const AActor* Target)
 	else
 	{
 		GetWorld()->GetTimerManager().ClearTimer(AimingTimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT("Hui"))
 	}
 }
 
