@@ -32,6 +32,9 @@ protected:
 	class UTextBlock* CostLabel;
 
 	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* DescriptionLabel;
+
+	UPROPERTY(meta = (BindWidget))
 	class UImage* UpgradeImage;
 
 private:

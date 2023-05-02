@@ -78,6 +78,6 @@ void ABase::RecieveDamage(int32 Damage)
 void ABase::BaseDestroyed()
 {
 	//TODO when base is destroyed
-	Destroy();
+	//Destroy();
 }
 

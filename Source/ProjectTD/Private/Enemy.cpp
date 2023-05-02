@@ -86,7 +86,7 @@ void AEnemy::ReceiveDamage(int32 Damage)
 	{ 
 		DamageDealt = -DamageDealt;
 	}
-
+	UE_LOG(LogTemp, Warning, TEXT("%f"), DamageDealt);
 	Health -= DamageDealt;
 
 	if (Health <= 0)

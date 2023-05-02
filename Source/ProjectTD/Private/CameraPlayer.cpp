@@ -16,7 +16,7 @@
 
 // Sets default values
 ACameraPlayer::ACameraPlayer()
-	:ZoomMin(900.f), ZoomMax(3500.f), ZoomSpeed(-95.f), Money(10), Income(2)
+	:ZoomMin(900.f), ZoomMax(4500.f), ZoomSpeed(-95.f), Money(10), Income(2)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -27,7 +27,7 @@ ACameraPlayer::ACameraPlayer()
 
 	SpringArm = CreateDefaultSubobject< USpringArmComponent>("Spring arm");
 	SpringArm->SetupAttachment(Root);
-	SpringArm->TargetArmLength = 2500.f;
+	SpringArm->TargetArmLength = 3500.f;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);

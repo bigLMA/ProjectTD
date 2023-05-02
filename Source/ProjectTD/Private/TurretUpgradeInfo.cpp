@@ -19,6 +19,7 @@ void UTurretUpgradeInfo::DisplayWidget(ATurret* InTurret, int32 InIndex)
 
 	auto Upgrade = Turret->GetUpgradeAtIndex(Index);
 	CostLabel->SetText(FText::FromString(FString::FromInt(Upgrade.UpgradeCost->GetFloatValue(Upgrade.CurrentLevel + 1))));
+	DescriptionLabel->SetText(Upgrade.Description);
 	if (Upgrade.Icon)
 	{
 		UpgradeImage->SetBrushFromTexture(Upgrade.Icon);
@@ -41,7 +42,11 @@ void UTurretUpgradeInfo::OnButtonPushed()
 	auto Upgrade = Turret->GetUpgradeAtIndex(Index);
 
 	// Check if is fully Upgraded
-	if (Upgrade.CurrentLevel >= Upgrade.MaxLevel) { return; }
+	if (Upgrade.CurrentLevel >= Upgrade.MaxLevel)
+	{
+		CostLabel->SetVisibility(ESlateVisibility::Collapsed);
+		return;
+	}
 
 	//Check if player has money to Upgrade
 	if (auto Player = Cast<ACameraPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
