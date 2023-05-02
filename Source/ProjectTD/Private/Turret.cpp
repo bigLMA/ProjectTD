@@ -73,6 +73,7 @@ void ATurret::AimAt(const AActor* Target)
 
 	if (IsValid(Target))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Target->GetName())
 		GetWorld()->GetTimerManager().SetTimer(AimingTimerHandle, [this, Target, Time]()
 		{
 			LockOn(Target, Time);
@@ -81,6 +82,7 @@ void ATurret::AimAt(const AActor* Target)
 	else
 	{
 		GetWorld()->GetTimerManager().ClearTimer(AimingTimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT("Hui"))
 	}
 }
 

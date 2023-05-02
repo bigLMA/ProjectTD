@@ -57,6 +57,12 @@ void ATurretAIController::SetTarget(AEnemy* NewTarget)
 	
 	if (auto ControlledTurret = Cast<ATurret>(GetPawn()))
 	{
+		//if (!IsValid(Target))
+		//{
+		//	return;
+		//}
+
+		//UE_LOG(LogTemp, Warning, TEXT("%s"), *NewTarget->GetName())
 		ControlledTurret->AimAt(TargetActor);
 	}
 }
