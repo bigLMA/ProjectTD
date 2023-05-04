@@ -18,6 +18,7 @@ void UTurretUpgradeInfo::DisplayWidget(ATurret* InTurret, int32 InIndex)
 	Turret = InTurret;
 
 	auto Upgrade = Turret->GetUpgradeAtIndex(Index);
+
 	CostLabel->SetText(FText::FromString(FString::FromInt(Upgrade.UpgradeCost->GetFloatValue(Upgrade.CurrentLevel + 1))));
 	DescriptionLabel->SetText(Upgrade.Description);
 	if (Upgrade.Icon)

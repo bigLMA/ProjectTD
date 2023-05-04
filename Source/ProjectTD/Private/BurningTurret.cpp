@@ -19,7 +19,7 @@ void ABurningTurret::Upgrade(EUpgradeType UpgradeType)
 	{
 	case EUpgradeType::BurningDamage:
 		BurningDamage= Upgrades[Index].Value->GetFloatValue(++Upgrades[Index].CurrentLevel);
-		UE_LOG(LogTemp, Warning, TEXT("BURN DAMaGE"))
+		
 		break;
 	default:
 		break;
